@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
 
   <style>
+    /* ========== DESIGN TOKENS ========== */
     :root {
       --bg:        #070b0f;
       --surface:   #0d1319;
@@ -31,6 +32,7 @@
       --r:         8px;
       --r2:        14px;
     }
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { font-size: 16px; }
     body {
@@ -40,6 +42,8 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+
+    /* ========== UTILITY ========== */
     .hidden { display: none !important; }
     .screen { display: none; min-height: 100vh; flex-direction: column; }
     .screen.active { display: flex; }
@@ -58,6 +62,7 @@
     }
     input:focus, textarea:focus, select:focus { border-color: var(--accent); }
     textarea { resize: vertical; }
+
     button {
       font-family: inherit;
       cursor: pointer;
@@ -67,6 +72,7 @@
       transition: all 0.15s;
     }
     button:active { transform: scale(0.97); }
+
     .btn-primary {
       background: var(--accent);
       color: #000;
@@ -103,6 +109,7 @@
     }
     .btn-score:hover { background: var(--accent); color: #000; border-color: var(--accent); }
 
+    /* ========== NOISE OVERLAY ========== */
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -113,9 +120,10 @@
       opacity: 0.3;
     }
 
-    /* TOASTS */
+    /* ========== TOASTS ========== */
     #toast-container {
-      position: fixed; bottom: 24px; right: 24px;
+      position: fixed;
+      bottom: 24px; right: 24px;
       display: flex; flex-direction: column; gap: 10px;
       z-index: 10000;
     }
@@ -126,7 +134,7 @@
       padding: 0.75rem 1.1rem;
       border-radius: var(--r);
       font-size: 0.88rem;
-      max-width: 300px;
+      max-width: 320px;
       animation: slideIn 0.3s ease;
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
     }
@@ -135,7 +143,7 @@
     .toast.info    { border-left: 3px solid var(--accent); }
     @keyframes slideIn { from { transform: translateX(60px); opacity:0; } to { transform: none; opacity:1; } }
 
-    /* MODAL */
+    /* ========== MODAL ========== */
     .modal-backdrop {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.75);
@@ -160,16 +168,14 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end; }
 
-    /* ========== AUTH SCREEN ========== */
-    #screen-auth {
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.08) 0%, transparent 60%), var(--bg);
+    /* ========== CONFIG SCREEN ========== */
+    #screen-config {
+      align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 60%), var(--bg);
       padding: 2rem;
     }
-    .auth-card {
-      width: 440px;
-      max-width: 100%;
+    .config-card {
+      width: 520px; max-width: 100%;
       background: var(--surface);
       border: 1px solid var(--border2);
       border-radius: var(--r2);
@@ -177,43 +183,32 @@
     }
     .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.06em; margin-bottom: 0.25rem; }
     .logo span { color: var(--accent); }
-    .auth-subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
-    .auth-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.75rem; }
-    .auth-tab {
-      flex: 1; padding: 0.65rem;
-      background: transparent; color: var(--text2);
-      font-size: 0.9rem; font-weight: 500;
-      border-bottom: 2px solid transparent;
-      border-radius: 0;
-      transition: all 0.15s;
-    }
-    .auth-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .auth-tab:hover { color: var(--text); }
-    .auth-error {
-      background: rgba(255,51,70,0.1);
-      border: 1px solid rgba(255,51,70,0.3);
+    .config-subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
+    .config-note {
+      background: rgba(0,212,255,0.06);
+      border: 1px solid var(--accent-dim);
       border-radius: var(--r);
-      padding: 0.65rem 0.9rem;
-      font-size: 0.84rem;
-      color: #ff6b7a;
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text2);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .config-note strong { color: var(--accent); display: block; margin-bottom: 0.25rem; }
+    .rules-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 0.9rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text2);
       margin-bottom: 1rem;
-    }
-    .auth-divider { text-align: center; color: var(--text3); font-size: 0.78rem; margin: 1rem 0; }
-    .user-badge {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.82rem; color: var(--text2);
-    }
-    .user-avatar {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: var(--accent-dim);
-      color: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700;
-      flex-shrink: 0;
+      line-height: 1.7;
+      user-select: all;
     }
 
-    /* HOME SCREEN */
+    /* ========== HOME SCREEN ========== */
     #screen-home {
       align-items: center; justify-content: center;
       background:
@@ -243,15 +238,10 @@
     .home-divider { display: flex; align-items: center; gap: 1rem; color: var(--text3); font-size: 0.8rem; margin-bottom: 1.5rem; }
     .home-divider::before, .home-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .join-row { display: flex; gap: 0.75rem; }
-    .home-topbar {
-      position: fixed; top: 0; left: 0; right: 0;
-      display: flex; align-items: center; justify-content: flex-end;
-      padding: 0.75rem 1.5rem;
-      gap: 0.75rem;
-      z-index: 100;
-    }
+    .home-settings { position: fixed; top: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border2); padding: 0.5rem 0.9rem; font-size: 0.8rem; color: var(--text2); }
+    .home-settings:hover { color: var(--text); }
 
-    /* STREAMER SCREEN */
+    /* ========== STREAMER SCREEN ========== */
     #screen-streamer {
       background: var(--bg);
       flex-direction: column;
@@ -259,7 +249,9 @@
       overflow: hidden;
     }
     .streamer-header {
-      display: flex; align-items: center; gap: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
       padding: 0.9rem 1.5rem;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -268,14 +260,20 @@
     .streamer-header .logo-small { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.06em; }
     .streamer-header .logo-small span { color: var(--accent); }
     .live-badge {
-      background: var(--red); color: #fff;
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
-      padding: 0.25rem 0.65rem; border-radius: 4px;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
       display: flex; align-items: center; gap: 5px;
     }
     .live-badge::before {
-      content: ''; width: 7px; height: 7px;
-      background: #fff; border-radius: 50%;
+      content: '';
+      width: 7px; height: 7px;
+      background: #fff;
+      border-radius: 50%;
       animation: pulse 1.2s infinite;
     }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -285,20 +283,42 @@
     .viewer-count { display: flex; align-items: center; gap: 5px; color: var(--text2); font-size: 0.85rem; }
     .viewer-count span:first-child { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
     .stream-code-pill {
-      background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 6px; padding: 0.3rem 0.75rem;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 0.3rem 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
       display: flex; align-items: center; gap: 0.5rem;
-      cursor: pointer; color: var(--accent);
+      cursor: pointer;
+      color: var(--accent);
     }
     .stream-code-pill:hover { background: var(--accent-dim); }
     .stream-code-pill .copy-icon { font-size: 0.8rem; opacity: 0.7; }
 
-    .streamer-body { display: grid; grid-template-columns: 1fr 340px; flex: 1; overflow: hidden; }
+    .streamer-body {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      flex: 1;
+      overflow: hidden;
+    }
 
-    .video-area { display: flex; flex-direction: column; background: #000; position: relative; overflow: hidden; }
-    .video-preview-wrap { flex: 1; position: relative; overflow: hidden; }
-    video { width: 100%; height: 100%; object-fit: cover; display: block; background: #000; }
+    /* Video area */
+    .video-area {
+      display: flex; flex-direction: column;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-preview-wrap {
+      flex: 1; position: relative; overflow: hidden;
+    }
+    video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #000;
+    }
     .video-overlay-scores {
       position: absolute; bottom: 0; left: 0; right: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
@@ -307,9 +327,12 @@
     }
     .scoreboard-overlay {
       display: flex; align-items: center; gap: 1.25rem;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px; padding: 0.75rem 1.25rem; width: fit-content;
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
+      width: fit-content;
     }
     .team-overlay { text-align: center; }
     .team-overlay .t-name { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text2); margin-bottom: 2px; }
@@ -319,29 +342,97 @@
     .score-sep { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--text3); }
     .overlay-live { background: var(--red); color: #fff; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: auto; }
 
+    /* ── UPLOAD STATUS BAR ── */
+    .upload-status-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0.6rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+    .upload-status-indicator {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text3);
+      flex-shrink: 0;
+    }
+    .status-dot.recording { background: var(--red); animation: pulse 1s infinite; }
+    .status-dot.uploading { background: var(--gold); animation: pulse 0.5s infinite; }
+    .status-dot.done      { background: var(--green); }
+
+    .chunk-progress-wrap {
+      flex: 1;
+      height: 4px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .chunk-progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 1s linear;
+    }
+    .chunk-progress-bar.uploading { background: var(--gold); width: 100% !important; animation: uploadPulse 1s ease-in-out infinite; }
+    @keyframes uploadPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .chunk-timer-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text2);
+      flex-shrink: 0;
+      min-width: 90px;
+      text-align: right;
+    }
+
+    /* Controls bar */
     .controls-bar {
-      background: var(--surface); border-top: 1px solid var(--border);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
       padding: 0.85rem 1.25rem;
-      display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+      display: flex; align-items: center; gap: 1rem;
+      flex-shrink: 0;
     }
     .ctrl-group { display: flex; align-items: center; gap: 0.5rem; }
     .ctrl-label { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; }
     .ctrl-toggle {
       width: 36px; height: 20px;
-      background: var(--surface2); border-radius: 10px;
+      background: var(--surface2);
+      border-radius: 10px;
       border: 1px solid var(--border2);
-      position: relative; cursor: pointer; transition: background 0.2s;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
     }
     .ctrl-toggle.on { background: var(--accent); border-color: var(--accent); }
     .ctrl-toggle::after {
-      content: ''; position: absolute; top: 2px; left: 2px;
-      width: 14px; height: 14px; background: var(--text2);
-      border-radius: 50%; transition: transform 0.2s, background 0.2s;
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      background: var(--text2);
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
     }
     .ctrl-toggle.on::after { transform: translateX(16px); background: #000; }
 
-    .right-panel { background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-    .panel-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    /* Right panel */
+    .right-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-tabs {
+      display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
     .panel-tab {
       flex: 1; padding: 0.75rem;
       background: transparent; color: var(--text2);
@@ -351,11 +442,18 @@
     }
     .panel-tab:hover { color: var(--text); }
     .panel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
     .panel-content { flex: 1; overflow: hidden; display: none; flex-direction: column; }
     .panel-content.active { display: flex; }
 
+    /* Scores panel */
     .scores-panel { padding: 1.25rem; gap: 1rem; overflow-y: auto; }
-    .score-team-card { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--r); padding: 1rem 1.25rem; }
+    .score-team-card {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      padding: 1rem 1.25rem;
+    }
     .stc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
     .stc-top label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text2); }
     .score-display { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.04em; line-height: 1; }
@@ -363,7 +461,13 @@
     .team-name-input { font-size: 0.9rem; font-weight: 600; background: transparent; border: 1px solid transparent; padding: 0.3rem 0.5rem; border-radius: 6px; }
     .team-name-input:focus { background: var(--bg); border-color: var(--border2); }
     .sport-select-row { margin-bottom: 0.5rem; }
-    .timer-section { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--r); padding: 1rem 1.25rem; text-align: center; }
+    .timer-section {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      padding: 1rem 1.25rem;
+      text-align: center;
+    }
     .timer-display { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 600; color: var(--accent); letter-spacing: 0.05em; margin: 0.5rem 0; }
     .timer-controls { display: flex; gap: 0.5rem; justify-content: center; }
     .timer-controls button { padding: 0.4rem 0.9rem; font-size: 0.82rem; }
@@ -371,10 +475,15 @@
     .period-row label { font-size: 0.78rem; color: var(--text2); flex-shrink: 0; }
     .period-row input { width: 100px; text-align: center; }
 
+    /* Chat panel */
     .chat-panel { overflow: hidden; }
-    .chat-messages { flex: 1; overflow-y: auto; padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; scroll-behavior: smooth; }
+    .chat-messages {
+      flex: 1; overflow-y: auto;
+      padding: 0.75rem 1rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+      scroll-behavior: smooth;
+    }
     .chat-messages::-webkit-scrollbar { width: 4px; }
-    .chat-messages::-webkit-scrollbar-track { background: transparent; }
     .chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
     .chat-msg { display: flex; flex-direction: column; gap: 2px; animation: msgIn 0.2s ease; }
     @keyframes msgIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: none; } }
@@ -382,30 +491,101 @@
     .chat-msg .msg-meta strong { color: var(--text2); }
     .chat-msg .msg-text { font-size: 0.88rem; line-height: 1.4; }
     .chat-msg.host-msg .msg-meta strong { color: var(--accent); }
-    .chat-input-row { padding: 0.75rem 1rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; flex-shrink: 0; }
+    .chat-input-row {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 0.5rem; flex-shrink: 0;
+    }
     .chat-input-row input { flex: 1; }
-    .send-btn { background: var(--accent); color: #000; border: none; border-radius: var(--r); padding: 0.5rem 0.9rem; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+    .send-btn {
+      background: var(--accent); color: #000;
+      border: none; border-radius: var(--r);
+      padding: 0.5rem 0.9rem; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;
+    }
     .send-btn:hover { filter: brightness(1.1); }
 
+    /* Viewers tab */
     .viewers-panel { padding: 1rem; overflow-y: auto; gap: 0.5rem; }
-    .viewer-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.75rem; background: var(--surface2); border-radius: var(--r); }
-    .viewer-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0; }
+    .viewer-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 0.75rem;
+      background: var(--surface2); border-radius: var(--r);
+    }
+    .viewer-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+    }
     .viewer-name { font-size: 0.88rem; }
     .viewer-since { font-size: 0.72rem; color: var(--text2); }
 
-    /* VIEWER SCREEN */
-    #screen-viewer { background: var(--bg); height: 100vh; overflow: hidden; flex-direction: column; }
-    .viewer-header { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    /* ========== VIEWER SCREEN ========== */
+    #screen-viewer {
+      background: var(--bg); height: 100vh; overflow: hidden; flex-direction: column;
+    }
+    .viewer-header {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.8rem 1.25rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
     .viewer-header .logo-small { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.06em; }
     .viewer-header .logo-small span { color: var(--accent); }
-    .viewer-body { display: grid; grid-template-columns: 1fr 320px; flex: 1; overflow: hidden; }
-    .viewer-video-side { display: flex; flex-direction: column; background: #000; overflow: hidden; }
+    .viewer-body {
+      display: grid; grid-template-columns: 1fr 320px; flex: 1; overflow: hidden;
+    }
+
+    /* Video side */
+    .viewer-video-side {
+      display: flex; flex-direction: column; background: #000; overflow: hidden;
+    }
     .viewer-video-wrap { flex: 1; position: relative; overflow: hidden; }
     .viewer-video-wrap video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+
+    /* ── VIEWER STREAM STATUS OVERLAY ── */
+    .stream-status-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: rgba(7,11,15,0.88);
+      gap: 1rem;
+      transition: opacity 0.5s;
+    }
+    .stream-status-overlay.hidden-overlay { opacity: 0; pointer-events: none; }
+    .stream-status-icon { font-size: 3rem; opacity: 0.5; }
+    .stream-status-text { font-size: 1rem; color: var(--text2); }
+    .stream-status-sub { font-size: 0.8rem; color: var(--text3); }
+
+    /* ── CHUNK LOADING BAR (viewer) ── */
+    .viewer-chunk-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--border);
+    }
+    .viewer-chunk-fill {
+      height: 100%; background: var(--accent); width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    /* Segment badge */
+    .segment-badge {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 0.3rem 0.65rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text2);
+      display: none;
+    }
+    .segment-badge.show { display: block; }
+
     .viewer-score-bar {
-      background: rgba(0,0,0,0.9); backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(8px);
       border-top: 1px solid var(--border);
-      padding: 0.7rem 1.25rem; display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0;
+      padding: 0.7rem 1.25rem;
+      display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0;
     }
     .vsb-team { display: flex; align-items: center; gap: 0.75rem; }
     .vsb-name { font-size: 0.85rem; font-weight: 600; }
@@ -416,15 +596,23 @@
     .vsb-meta { margin-left: auto; text-align: right; }
     .vsb-timer { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--accent); }
     .vsb-period { font-size: 0.72rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
-    .viewer-chat-side { background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-    .viewer-chat-header { padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+
+    /* Chat side */
+    .viewer-chat-side {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .viewer-chat-header {
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
     .viewer-chat-header h3 { font-size: 0.9rem; font-weight: 600; }
     .online-dot { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; color: var(--text2); }
     .online-dot::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 1.5s infinite; }
-    .no-stream { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text2); position: absolute; inset: 0; background: #000; }
-    .no-stream .icon { font-size: 3rem; opacity: 0.4; }
-    .no-stream p { font-size: 0.9rem; }
 
+    /* ========== RESPONSIVE ========== */
     @media (max-width: 768px) {
       .streamer-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
       .right-panel { height: 320px; border-left: none; border-top: 1px solid var(--border); }
@@ -436,62 +624,64 @@
 </head>
 <body>
 
+<!-- TOAST CONTAINER -->
 <div id="toast-container"></div>
 
-<!-- ===================== AUTH SCREEN ===================== -->
-<div id="screen-auth" class="screen active">
-  <div class="auth-card">
+<!-- ===================== CONFIG SCREEN ===================== -->
+<div id="screen-config" class="screen active">
+  <div class="config-card">
     <div class="logo">Live<span>Pulse</span></div>
-    <div class="auth-subtitle">Real-time sports streaming platform</div>
+    <div class="config-subtitle">Real-time sports streaming platform</div>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login-btn" onclick="switchAuthTab('login')">Sign In</button>
-      <button class="auth-tab" id="tab-signup-btn" onclick="switchAuthTab('signup')">Create Account</button>
+    <div class="config-note">
+      <strong>⚡ Firebase Setup Required</strong>
+      Enter your Firebase project credentials below. Enable Firestore + Anonymous Auth.
+      Streams are uploaded to Cloudinary every 2 minutes.
     </div>
 
-    <div id="auth-error" class="auth-error hidden"></div>
-
-    <!-- LOGIN FORM -->
-    <div id="auth-login-form">
+    <div class="form-group">
+      <label>API Key</label>
+      <input type="text" id="cfg-apiKey" placeholder="AIzaSy..." />
+    </div>
+    <div class="form-row">
       <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="you@example.com" onkeydown="if(event.key==='Enter') doLogin()" />
+        <label>Auth Domain</label>
+        <input type="text" id="cfg-authDomain" placeholder="project.firebaseapp.com" />
       </div>
       <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
+        <label>Project ID</label>
+        <input type="text" id="cfg-projectId" placeholder="my-project" />
       </div>
-      <button class="btn-primary" style="width:100%; padding:0.85rem; margin-top:0.5rem;" onclick="doLogin()" id="login-btn">Sign In →</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Storage Bucket</label>
+        <input type="text" id="cfg-storageBucket" placeholder="project.appspot.com" />
+      </div>
+      <div class="form-group">
+        <label>Messaging Sender ID</label>
+        <input type="text" id="cfg-messagingSenderId" placeholder="1234567890" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>App ID</label>
+      <input type="text" id="cfg-appId" placeholder="1:...:web:..." />
     </div>
 
-    <!-- SIGNUP FORM -->
-    <div id="auth-signup-form" class="hidden">
-      <div class="form-group">
-        <label>Display Name</label>
-        <input type="text" id="signup-name" placeholder="e.g. SportsCaster_NG" maxlength="30" />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="signup-email" placeholder="you@example.com" />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="signup-password" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter') doSignup()" />
-      </div>
-      <button class="btn-primary" style="width:100%; padding:0.85rem; margin-top:0.5rem;" onclick="doSignup()" id="signup-btn">Create Account →</button>
+    <div style="margin-top:0.5rem; margin-bottom:1rem;">
+      <p style="font-size:0.75rem; color:var(--text2); margin-bottom:0.5rem;">Required Firestore Security Rules:</p>
+      <div class="rules-box">rules_version = '2';<br>service cloud.firestore {<br>&nbsp;&nbsp;match /databases/{database}/documents {<br>&nbsp;&nbsp;&nbsp;&nbsp;match /streams/{streamId}/{doc=**} {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allow read, write: if true;<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;}<br>}</div>
     </div>
+
+    <button class="btn-primary" style="width:100%; padding:0.85rem;" onclick="saveConfig()">
+      Connect to Firebase →
+    </button>
   </div>
 </div>
 
 <!-- ===================== HOME SCREEN ===================== -->
 <div id="screen-home" class="screen">
-  <div class="home-topbar">
-    <div class="user-badge">
-      <div class="user-avatar" id="home-avatar">?</div>
-      <span id="home-username">User</span>
-    </div>
-    <button class="btn-ghost" style="font-size:0.8rem; padding:0.45rem 0.9rem;" onclick="doLogout()">Sign Out</button>
-  </div>
+  <button class="home-settings btn-ghost" onclick="showConfig()">⚙ Settings</button>
   <div class="home-inner">
     <div class="home-logo">Live<span>Pulse</span></div>
     <p class="home-tagline">Stream live events. Real-time scores. Instant chat.</p>
@@ -517,6 +707,7 @@
 
 <!-- ===================== STREAMER SCREEN ===================== -->
 <div id="screen-streamer" class="screen">
+  <!-- Header -->
   <div class="streamer-header">
     <div class="logo-small">Live<span>Pulse</span></div>
     <div class="live-badge" id="s-live-badge" style="display:none;">LIVE</div>
@@ -535,7 +726,9 @@
     <button class="btn-danger" onclick="endStream()" style="font-size:0.82rem; padding:0.5rem 0.9rem;">End Stream</button>
   </div>
 
+  <!-- Body -->
   <div class="streamer-body">
+    <!-- Video -->
     <div class="video-area">
       <div class="video-preview-wrap">
         <video id="s-local-video" autoplay muted playsinline></video>
@@ -554,6 +747,20 @@
           </div>
         </div>
       </div>
+
+      <!-- Upload Status Bar -->
+      <div class="upload-status-bar">
+        <div class="upload-status-indicator">
+          <div class="status-dot" id="upload-dot"></div>
+          <span id="upload-status-text" style="color:var(--text2); font-size:0.82rem;">Initializing...</span>
+        </div>
+        <div class="chunk-progress-wrap">
+          <div class="chunk-progress-bar" id="chunk-progress"></div>
+        </div>
+        <div class="chunk-timer-label" id="chunk-timer-label">—</div>
+      </div>
+
+      <!-- Controls -->
       <div class="controls-bar">
         <div class="ctrl-group">
           <span class="ctrl-label">Camera</span>
@@ -564,10 +771,11 @@
           <div class="ctrl-toggle on" id="ctrl-audio" onclick="toggleAudio(this)"></div>
         </div>
         <div style="flex:1;"></div>
-        <span style="font-size:0.78rem; color:var(--text2);" id="conn-status">Waiting for viewers...</span>
+        <span style="font-size:0.78rem; color:var(--text2);" id="chunk-count-label">No chunks uploaded yet</span>
       </div>
     </div>
 
+    <!-- Right Panel -->
     <div class="right-panel">
       <div class="panel-tabs">
         <button class="panel-tab active" onclick="switchTab('scores',this)">Scores</button>
@@ -575,6 +783,7 @@
         <button class="panel-tab" onclick="switchTab('viewers',this)">Viewers</button>
       </div>
 
+      <!-- Scores Tab -->
       <div class="panel-content scores-panel active" id="tab-scores">
         <div class="form-group sport-select-row">
           <label style="font-size:0.75rem; color:var(--text2); text-transform:uppercase; letter-spacing:0.07em; display:block; margin-bottom:0.4rem;">Sport / Event</label>
@@ -589,6 +798,7 @@
             <option>🏆 Other</option>
           </select>
         </div>
+        <!-- Team 1 -->
         <div class="score-team-card">
           <div class="stc-top">
             <label>Team 1</label>
@@ -600,6 +810,7 @@
           <input class="team-name-input" id="t1-name" value="Team A" oninput="syncTeamName(1)" placeholder="Team 1 name" />
           <div class="score-display t1-score" id="t1-score-display">0</div>
         </div>
+        <!-- Team 2 -->
         <div class="score-team-card">
           <div class="stc-top">
             <label>Team 2</label>
@@ -611,6 +822,7 @@
           <input class="team-name-input" id="t2-name" value="Team B" oninput="syncTeamName(2)" placeholder="Team 2 name" />
           <div class="score-display t2-score" id="t2-score-display">0</div>
         </div>
+        <!-- Timer -->
         <div class="timer-section">
           <div style="font-size:0.75rem; color:var(--text2); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:2px;">Match Clock</div>
           <div class="timer-display" id="timer-display">00:00</div>
@@ -626,6 +838,7 @@
         <button class="btn-danger" style="width:100%;" onclick="resetScores()">Reset Scores</button>
       </div>
 
+      <!-- Chat Tab -->
       <div class="panel-content chat-panel" id="tab-chat">
         <div class="chat-messages" id="s-chat-messages">
           <div style="text-align:center; padding:2rem 0; color:var(--text3); font-size:0.82rem;">Chat will appear here</div>
@@ -636,6 +849,7 @@
         </div>
       </div>
 
+      <!-- Viewers Tab -->
       <div class="panel-content viewers-panel" id="tab-viewers">
         <div id="viewers-list">
           <div style="text-align:center; padding:2rem 0; color:var(--text3); font-size:0.82rem;">No viewers yet</div>
@@ -662,15 +876,27 @@
   </div>
 
   <div class="viewer-body">
+    <!-- Video side -->
     <div class="viewer-video-side">
-      <div class="viewer-video-wrap" style="position:relative;">
-        <video id="v-remote-video" autoplay playsinline style="display:none;"></video>
-        <div class="no-stream" id="v-no-stream">
-          <div class="icon">📡</div>
-          <p>Connecting to stream...</p>
-          <p style="font-size:0.8rem; opacity:0.7;">This may take a moment</p>
+      <div class="viewer-video-wrap">
+        <video id="v-remote-video" autoplay playsinline controls style="display:none;"></video>
+
+        <!-- Status overlay -->
+        <div class="stream-status-overlay" id="v-status-overlay">
+          <div class="stream-status-icon" id="v-status-icon">📡</div>
+          <div class="stream-status-text" id="v-status-text">Connecting to stream...</div>
+          <div class="stream-status-sub" id="v-status-sub">First segment uploads in up to 2 minutes</div>
         </div>
+
+        <!-- Chunk progress fill -->
+        <div class="viewer-chunk-bar">
+          <div class="viewer-chunk-fill" id="v-chunk-fill"></div>
+        </div>
+
+        <!-- Segment badge -->
+        <div class="segment-badge" id="v-segment-badge">Segment #1</div>
       </div>
+
       <div class="viewer-score-bar">
         <div class="vsb-team">
           <div class="vsb-name" id="vsb-t1-name">Team A</div>
@@ -688,6 +914,7 @@
       </div>
     </div>
 
+    <!-- Chat side -->
     <div class="viewer-chat-side">
       <div class="viewer-chat-header">
         <h3>Live Chat</h3>
@@ -702,7 +929,7 @@
   </div>
 </div>
 
-<!-- CREATE STREAM MODAL -->
+<!-- ===================== CREATE STREAM MODAL ===================== -->
 <div class="modal-backdrop hidden" id="create-modal">
   <div class="modal">
     <h2>Go Live</h2>
@@ -747,161 +974,114 @@
   </div>
 </div>
 
+<!-- ===================== VIEWER NAME MODAL ===================== -->
+<div class="modal-backdrop hidden" id="viewer-name-modal">
+  <div class="modal">
+    <h2>Join Stream</h2>
+    <p>Enter your name to join the live stream</p>
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" id="v-username" placeholder="e.g. FanZone_Lagos" maxlength="25" onkeydown="if(event.key==='Enter') confirmJoin()" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="cancelJoin()">Cancel</button>
+      <button class="btn-primary" onclick="confirmJoin()">Watch Live 📺</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== JAVASCRIPT ===================== -->
 <script>
 /* ============================================================
-   FIREBASE CONFIG — HARDCODED
+   CLOUDINARY CONFIG
 ============================================================ */
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDW8V2SjNITrA4LcdmeILh944mTbOKnM0c",
-  authDomain: "rewarderhub.firebaseapp.com",
-  projectId: "rewarderhub",
-  storageBucket: "rewarderhub.firebasestorage.app",
-  messagingSenderId: "85965945106",
-  appId: "1:85965945106:web:fa0a57d8968926e1041bcb",
-  measurementId: "G-F2ERB5NGN0"
-};
+const CLOUDINARY_CLOUD_NAME   = 'dzhdgxjhl';
+const CLOUDINARY_UPLOAD_PRESET = 'posepreset';
+const CLOUDINARY_UPLOAD_URL   = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`;
+
+const CHUNK_DURATION_MS = 120000; // 2 minutes
 
 /* ============================================================
    STATE
 ============================================================ */
 let db = null, auth = null;
-let userId = null, userName = null, userEmail = null;
+let userId = null, userName = null;
 let currentStreamId = null;
 let localStream = null;
-let peerConnections = {};
-let viewerPC = null;
 let streamUnsubscribers = [];
+let pendingJoinCode = null;
 let isHost = false;
+
+// Match timer
 let timerInterval = null;
 let timerSeconds = 0;
 let timerRunning = false;
+
+// Scores
 const scores = { t1: 0, t2: 0 };
 
-const ICE_SERVERS = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-    { urls: 'stun:stun2.l.google.com:19302' },
-    { urls: 'stun:stun.stunprotocol.org:3478' }
-  ]
-};
+// ── Recording / upload state (host) ──
+let mediaRecorder = null;
+let recordedChunks = [];
+let chunkCycleInterval = null;
+let chunkCountdownInterval = null;
+let chunkIndex = 0;
+let chunkSecondsLeft = CHUNK_DURATION_MS / 1000;
+let isUploadingChunk = false;
+
+// ── Playback state (viewer) ──
+let currentPlayingUrl = null;
+let nextChunkUrl = null;
+let viewerChunkIndex = 0;
+let viewerProgressInterval = null;
 
 /* ============================================================
-   INIT FIREBASE
+   FIREBASE INIT
 ============================================================ */
-(function initFirebase() {
+function saveConfig() {
+  const cfg = {
+    apiKey:            v('cfg-apiKey'),
+    authDomain:        v('cfg-authDomain'),
+    projectId:         v('cfg-projectId'),
+    storageBucket:     v('cfg-storageBucket'),
+    messagingSenderId: v('cfg-messagingSenderId'),
+    appId:             v('cfg-appId')
+  };
+  if (!cfg.apiKey || !cfg.projectId) { toast('Please fill in all required fields', 'error'); return; }
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
+    firebase.initializeApp(cfg);
     db = firebase.firestore();
     auth = firebase.auth();
+    localStorage.setItem('livepulse_config', JSON.stringify(cfg));
+    auth.signInAnonymously()
+      .then(cred => { userId = cred.user.uid; showScreen('home'); toast('Firebase connected!', 'success'); })
+      .catch(e => toast('Auth failed: ' + e.message, 'error'));
+  } catch(e) { toast('Firebase init failed: ' + e.message, 'error'); }
+}
 
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        userId = user.uid;
-        userEmail = user.email;
-        // Get display name from Firestore profile
-        db.collection('users').doc(user.uid).get().then(snap => {
-          userName = snap.exists ? (snap.data().displayName || user.email) : user.email;
-          updateHomeUserBadge();
-          showScreen('home');
-        }).catch(() => {
-          userName = user.email;
-          updateHomeUserBadge();
-          showScreen('home');
-        });
-      } else {
-        showScreen('auth');
-      }
-    });
-  } catch(e) {
-    toast('Firebase init error: ' + e.message, 'error');
+function showConfig() {
+  showScreen('config');
+  const saved = localStorage.getItem('livepulse_config');
+  if (saved) {
+    const c = JSON.parse(saved);
+    Object.keys(c).forEach(k => { const el = document.getElementById('cfg-'+k); if(el) el.value = c[k]; });
   }
-})();
-
-function updateHomeUserBadge() {
-  const display = userName || userEmail || 'User';
-  document.getElementById('home-username').textContent = display;
-  document.getElementById('home-avatar').textContent = display[0].toUpperCase();
 }
 
-/* ============================================================
-   AUTH
-============================================================ */
-function switchAuthTab(tab) {
-  document.getElementById('auth-login-form').classList.toggle('hidden', tab !== 'login');
-  document.getElementById('auth-signup-form').classList.toggle('hidden', tab !== 'signup');
-  document.getElementById('tab-login-btn').classList.toggle('active', tab === 'login');
-  document.getElementById('tab-signup-btn').classList.toggle('active', tab === 'signup');
-  clearAuthError();
-}
-
-function showAuthError(msg) {
-  const el = document.getElementById('auth-error');
-  el.textContent = msg;
-  el.classList.remove('hidden');
-}
-function clearAuthError() {
-  document.getElementById('auth-error').classList.add('hidden');
-}
-
-async function doLogin() {
-  const email = v('login-email').trim();
-  const pass  = v('login-password');
-  if (!email || !pass) { showAuthError('Please fill in all fields.'); return; }
-  const btn = document.getElementById('login-btn');
-  btn.textContent = 'Signing in...'; btn.disabled = true;
-  clearAuthError();
+function autoInit() {
+  const saved = localStorage.getItem('livepulse_config');
+  if (!saved) return;
   try {
-    await auth.signInWithEmailAndPassword(email, pass);
-    // onAuthStateChanged handles redirect
-  } catch(e) {
-    showAuthError(friendlyAuthError(e.code));
-  } finally {
-    btn.textContent = 'Sign In →'; btn.disabled = false;
-  }
-}
-
-async function doSignup() {
-  const name  = v('signup-name').trim();
-  const email = v('signup-email').trim();
-  const pass  = v('signup-password');
-  if (!name || !email || !pass) { showAuthError('Please fill in all fields.'); return; }
-  if (pass.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
-  const btn = document.getElementById('signup-btn');
-  btn.textContent = 'Creating...'; btn.disabled = true;
-  clearAuthError();
-  try {
-    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    // Save display name to Firestore
-    await db.collection('users').doc(cred.user.uid).set({
-      displayName: name,
-      email: email,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    userName = name;
-    // onAuthStateChanged handles redirect
-  } catch(e) {
-    showAuthError(friendlyAuthError(e.code));
-  } finally {
-    btn.textContent = 'Create Account →'; btn.disabled = false;
-  }
-}
-
-function doLogout() {
-  auth.signOut().then(() => { showScreen('auth'); });
-}
-
-function friendlyAuthError(code) {
-  const map = {
-    'auth/user-not-found': 'No account found with that email.',
-    'auth/wrong-password': 'Incorrect password.',
-    'auth/invalid-email': 'Invalid email address.',
-    'auth/email-already-in-use': 'An account already exists with this email.',
-    'auth/weak-password': 'Password is too weak (min 6 chars).',
-    'auth/too-many-requests': 'Too many attempts. Please try again later.',
-    'auth/invalid-credential': 'Invalid email or password.'
-  };
-  return map[code] || 'Authentication failed. Please try again.';
+    const cfg = JSON.parse(saved);
+    Object.keys(cfg).forEach(k => { const el = document.getElementById('cfg-'+k); if(el) el.value = cfg[k]; });
+    if (!cfg.apiKey) return;
+    firebase.initializeApp(cfg);
+    db = firebase.firestore();
+    auth = firebase.auth();
+    auth.signInAnonymously()
+      .then(cred => { userId = cred.user.uid; showScreen('home'); })
+      .catch(() => {});
+  } catch(e) {}
 }
 
 /* ============================================================
@@ -913,19 +1093,22 @@ function showScreen(name) {
 }
 
 /* ============================================================
-   CREATE STREAM
+   CREATE STREAM MODAL
 ============================================================ */
 function openCreateModal() {
   document.getElementById('create-modal').classList.remove('hidden');
-  // Pre-fill host name from logged-in user
-  document.getElementById('m-host').value = userName || '';
   document.getElementById('m-title').focus();
 }
-function closeCreateModal() { document.getElementById('create-modal').classList.add('hidden'); }
+function closeCreateModal() {
+  document.getElementById('create-modal').classList.add('hidden');
+}
 
+/* ============================================================
+   START STREAM (HOST)
+============================================================ */
 async function startStream() {
   const title  = v('m-title').trim();
-  const host   = v('m-host').trim() || userName || 'Host';
+  const host   = v('m-host').trim() || 'Host';
   const sport  = v('m-sport');
   const t1Name = v('m-t1').trim() || 'Team A';
   const t2Name = v('m-t2').trim() || 'Team B';
@@ -933,125 +1116,414 @@ async function startStream() {
 
   try {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-  } catch(e) { toast('Could not access camera/mic: ' + e.message, 'error'); return; }
+  } catch(e) {
+    toast('Could not access camera/mic: ' + e.message, 'error');
+    return;
+  }
 
   closeCreateModal();
   userName = host;
   isHost = true;
   currentStreamId = genId();
 
+  // Populate streamer UI
   document.getElementById('s-stream-title').textContent = title;
-  document.getElementById('s-stream-meta').textContent = sport + ' • Hosted by ' + host;
-  document.getElementById('s-stream-code').textContent = currentStreamId;
-  document.getElementById('s-live-badge').style.display = 'flex';
-  document.getElementById('t1-name').value = t1Name;
-  document.getElementById('t2-name').value = t2Name;
-  document.getElementById('so-t1-name').textContent = t1Name.toUpperCase();
-  document.getElementById('so-t2-name').textContent = t2Name.toUpperCase();
-  document.getElementById('sport-select').value = sport;
+  document.getElementById('s-stream-meta').textContent  = sport + ' • Hosted by ' + host;
+  document.getElementById('s-stream-code').textContent  = currentStreamId;
+  document.getElementById('s-live-badge').style.display  = 'flex';
+  document.getElementById('t1-name').value              = t1Name;
+  document.getElementById('t2-name').value              = t2Name;
+  document.getElementById('so-t1-name').textContent     = t1Name.toUpperCase();
+  document.getElementById('so-t2-name').textContent     = t2Name.toUpperCase();
+
+  // Show local preview
   document.getElementById('s-local-video').srcObject = localStream;
 
+  // Write stream doc to Firestore
   await db.collection('streams').doc(currentStreamId).set({
     title, hostId: userId, hostName: host, sport,
-    status: 'live', viewerCount: 0,
+    status: 'live',
+    viewerCount: 0,
     t1: { name: t1Name, score: 0 },
     t2: { name: t2Name, score: 0 },
     timer: '00:00', period: '1st Half',
+    latestChunk: null,
+    latestChunkIndex: 0,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
 
-  // Listen for viewer offers
-  const unsub = db.collection('streams').doc(currentStreamId)
-    .collection('signals').onSnapshot(snap => {
-      snap.docChanges().forEach(change => {
-        if (change.type === 'added') {
-          const vId = change.doc.id;
-          const data = change.doc.data();
-          if (data.offer && !peerConnections[vId]) handleViewerOffer(vId, data);
-        }
-      });
-    });
-  streamUnsubscribers.push(unsub);
-
-  const unsub2 = db.collection('streams').doc(currentStreamId).onSnapshot(snap => {
+  // Listen for viewer count changes
+  const unsub = db.collection('streams').doc(currentStreamId).onSnapshot(snap => {
     const d = snap.data();
     if (d) document.getElementById('s-viewer-count').textContent = d.viewerCount || 0;
   });
-  streamUnsubscribers.push(unsub2);
+  streamUnsubscribers.push(unsub);
 
+  // Subscribe to chat
   subscribeComments(currentStreamId, 'host');
+
   showScreen('streamer');
   toast('🔴 Live! Share code: ' + currentStreamId, 'success');
+
+  // Start recording chunk loop
+  startChunkLoop();
 }
 
 /* ============================================================
-   HOST: Handle incoming viewer WebRTC offer
+   CHUNK RECORDING + CLOUDINARY UPLOAD
 ============================================================ */
-async function handleViewerOffer(viewerId, data) {
+function getBestMimeType() {
+  const types = [
+    'video/webm;codecs=vp9,opus',
+    'video/webm;codecs=vp8,opus',
+    'video/webm;codecs=h264,opus',
+    'video/webm',
+    'video/mp4'
+  ];
+  return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
+}
+
+function startChunkLoop() {
   if (!localStream) return;
-  const pc = new RTCPeerConnection(ICE_SERVERS);
-  peerConnections[viewerId] = pc;
+  chunkIndex = 0;
+  startOneChunk();
+}
 
-  // Add all tracks from local stream to the peer connection
-  localStream.getTracks().forEach(track => {
-    pc.addTrack(track, localStream);
-  });
+function startOneChunk() {
+  if (!localStream || !currentStreamId) return;
 
-  pc.onicecandidate = e => {
-    if (e.candidate) {
-      db.collection('streams').doc(currentStreamId)
-        .collection('signals').doc(viewerId)
-        .collection('hostCandidates').add(e.candidate.toJSON());
-    }
+  const mimeType = getBestMimeType();
+  const opts = mimeType ? { mimeType, videoBitsPerSecond: 8_000_000 } : { videoBitsPerSecond: 8_000_000 };
+
+  try {
+    mediaRecorder = new MediaRecorder(localStream, opts);
+  } catch(e) {
+    try { mediaRecorder = new MediaRecorder(localStream); }
+    catch(e2) { toast('MediaRecorder not supported: ' + e2.message, 'error'); return; }
+  }
+
+  recordedChunks = [];
+
+  mediaRecorder.ondataavailable = e => {
+    if (e.data && e.data.size > 0) recordedChunks.push(e.data);
   };
 
-  pc.onconnectionstatechange = () => {
-    const state = pc.connectionState;
-    document.getElementById('conn-status').textContent =
-      Object.keys(peerConnections).length + ' viewer(s) — ' + state;
-    if (state === 'disconnected' || state === 'failed' || state === 'closed') {
-      delete peerConnections[viewerId];
-      // Decrement viewer count
-      db.collection('streams').doc(currentStreamId).update({
-        viewerCount: firebase.firestore.FieldValue.increment(-1)
-      }).catch(()=>{});
-      updateViewersList();
-    }
+  mediaRecorder.onstop = async () => {
+    if (!currentStreamId) return; // Stream ended
+    clearChunkCountdown();
+    const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'video/webm' });
+    recordedChunks = [];
+    await uploadChunk(blob);
+    // Start next chunk automatically
+    if (currentStreamId && localStream) startOneChunk();
   };
 
-  await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
-  const answer = await pc.createAnswer();
-  await pc.setLocalDescription(answer);
+  mediaRecorder.onerror = e => {
+    toast('Recording error: ' + e.error?.message, 'error');
+  };
 
-  await db.collection('streams').doc(currentStreamId)
-    .collection('signals').doc(viewerId)
-    .update({ answer: { type: answer.type, sdp: answer.sdp } });
+  mediaRecorder.start(500); // collect data every 500ms
+  setUploadStatusRecording();
+  startChunkCountdown();
 
-  // Listen for viewer ICE candidates
-  const unsub = db.collection('streams').doc(currentStreamId)
-    .collection('signals').doc(viewerId)
-    .collection('viewerCandidates').onSnapshot(snap => {
-      snap.docChanges().forEach(c => {
-        if (c.type === 'added') pc.addIceCandidate(new RTCIceCandidate(c.doc.data())).catch(()=>{});
+  // Schedule stop after CHUNK_DURATION_MS
+  chunkCycleInterval = setTimeout(() => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      setUploadStatusUploading();
+      mediaRecorder.stop();
+    }
+  }, CHUNK_DURATION_MS);
+}
+
+function startChunkCountdown() {
+  clearChunkCountdown();
+  chunkSecondsLeft = CHUNK_DURATION_MS / 1000;
+  updateChunkProgress(0);
+
+  chunkCountdownInterval = setInterval(() => {
+    chunkSecondsLeft--;
+    if (chunkSecondsLeft <= 0) { clearChunkCountdown(); return; }
+
+    const elapsed = (CHUNK_DURATION_MS / 1000) - chunkSecondsLeft;
+    const pct = (elapsed / (CHUNK_DURATION_MS / 1000)) * 100;
+    updateChunkProgress(pct);
+
+    const m = String(Math.floor(chunkSecondsLeft / 60)).padStart(2, '0');
+    const s = String(chunkSecondsLeft % 60).padStart(2, '0');
+    const lbl = document.getElementById('chunk-timer-label');
+    if (lbl) lbl.textContent = `Next upload: ${m}:${s}`;
+  }, 1000);
+}
+
+function clearChunkCountdown() {
+  clearInterval(chunkCountdownInterval);
+  chunkCountdownInterval = null;
+}
+
+function updateChunkProgress(pct) {
+  const bar = document.getElementById('chunk-progress');
+  if (bar) bar.style.width = pct + '%';
+}
+
+function setUploadStatusRecording() {
+  const dot  = document.getElementById('upload-dot');
+  const text = document.getElementById('upload-status-text');
+  if (dot)  { dot.className = 'status-dot recording'; }
+  if (text) { text.textContent = '🔴 Recording segment ' + (chunkIndex + 1) + '...'; text.style.color = 'var(--text)'; }
+}
+
+function setUploadStatusUploading() {
+  const dot  = document.getElementById('upload-dot');
+  const text = document.getElementById('upload-status-text');
+  const bar  = document.getElementById('chunk-progress');
+  const lbl  = document.getElementById('chunk-timer-label');
+  if (dot)  { dot.className = 'status-dot uploading'; }
+  if (text) { text.textContent = '⬆️ Uploading to Cloudinary...'; text.style.color = 'var(--gold)'; }
+  if (bar)  { bar.className = 'chunk-progress-bar uploading'; }
+  if (lbl)  { lbl.textContent = 'Uploading...'; }
+}
+
+function setUploadStatusDone(idx) {
+  const dot  = document.getElementById('upload-dot');
+  const text = document.getElementById('upload-status-text');
+  const bar  = document.getElementById('chunk-progress');
+  const cnt  = document.getElementById('chunk-count-label');
+  if (dot)  { dot.className = 'status-dot done'; }
+  if (text) { text.textContent = '✅ Segment ' + idx + ' live!'; text.style.color = 'var(--green)'; }
+  if (bar)  { bar.className = 'chunk-progress-bar'; bar.style.width = '0%'; }
+  if (cnt)  { cnt.textContent = idx + ' chunk' + (idx > 1 ? 's' : '') + ' uploaded'; }
+}
+
+async function uploadChunk(blob) {
+  if (!currentStreamId) return;
+  isUploadingChunk = true;
+  chunkIndex++;
+
+  const formData = new FormData();
+  formData.append('file', blob, `stream_${currentStreamId}_chunk${chunkIndex}.webm`);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  formData.append('resource_type', 'video');
+
+  try {
+    const res = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
+    const data = await res.json();
+
+    if (data.secure_url) {
+      const url = data.secure_url;
+
+      // Save chunk to Firestore
+      await db.collection('streams').doc(currentStreamId)
+        .collection('chunks').doc(String(chunkIndex)).set({
+          url,
+          index: chunkIndex,
+          ts: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+      // Update stream doc with latest chunk URL
+      await db.collection('streams').doc(currentStreamId).update({
+        latestChunk: url,
+        latestChunkIndex: chunkIndex
       });
-    });
-  streamUnsubscribers.push(unsub);
 
-  // Track viewer
-  await db.collection('streams').doc(currentStreamId)
-    .collection('viewers').doc(viewerId).set({
-      name: data.viewerName || 'Viewer',
+      setUploadStatusDone(chunkIndex);
+      toast(`Segment ${chunkIndex} uploaded & live!`, 'success');
+    } else {
+      const errMsg = data.error?.message || JSON.stringify(data);
+      toast('Cloudinary upload failed: ' + errMsg, 'error');
+      console.error('Cloudinary error:', data);
+    }
+  } catch(e) {
+    toast('Upload error: ' + e.message, 'error');
+    console.error('Upload error:', e);
+  }
+
+  isUploadingChunk = false;
+}
+
+/* ============================================================
+   JOIN STREAM (VIEWER)
+============================================================ */
+function focusJoin() { document.getElementById('join-code').focus(); }
+
+function joinStreamByCode() {
+  const code = v('join-code').trim().toUpperCase();
+  if (!code) { toast('Enter a stream code', 'error'); return; }
+  pendingJoinCode = code;
+  document.getElementById('viewer-name-modal').classList.remove('hidden');
+  document.getElementById('v-username').focus();
+}
+
+function cancelJoin() {
+  document.getElementById('viewer-name-modal').classList.add('hidden');
+  pendingJoinCode = null;
+}
+
+async function confirmJoin() {
+  const name = v('v-username').trim();
+  if (!name) { toast('Enter your name', 'error'); return; }
+  userName = name;
+  document.getElementById('viewer-name-modal').classList.add('hidden');
+  await connectToStream(pendingJoinCode);
+}
+
+async function connectToStream(streamId) {
+  currentStreamId = streamId;
+  isHost = false;
+  viewerChunkIndex = 0;
+
+  const snap = await db.collection('streams').doc(streamId).get();
+  if (!snap.exists || snap.data().status === 'ended') {
+    toast('Stream not found or has ended', 'error');
+    return;
+  }
+  const data = snap.data();
+
+  // Populate viewer UI
+  document.getElementById('v-stream-title').textContent = data.title || '';
+  document.getElementById('v-stream-meta').textContent  = (data.sport || '') + ' • by ' + (data.hostName || 'Host');
+  showScreen('viewer');
+  updateViewerScoreBar(data);
+
+  // Register viewer presence
+  await db.collection('streams').doc(streamId)
+    .collection('viewers').doc(userId).set({
+      name: userName,
       joinedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-  db.collection('streams').doc(currentStreamId).update({
+  db.collection('streams').doc(streamId).update({
     viewerCount: firebase.firestore.FieldValue.increment(1)
-  });
+  }).catch(() => {});
 
-  updateViewersList();
-  toast('👁 ' + (data.viewerName || 'A viewer') + ' joined', 'info');
+  // If a chunk is already available, play it immediately
+  if (data.latestChunk) {
+    setViewerStatus('loading', '⏳', 'Loading latest segment...', '');
+    playChunk(data.latestChunk, data.latestChunkIndex || 1);
+  } else {
+    setViewerStatus('waiting', '📡', 'Waiting for first segment...', 'The host is recording — first video uploads in up to 2 min');
+  }
+
+  // Listen for stream doc updates (scores, new chunks, viewer count)
+  const unsub = db.collection('streams').doc(streamId).onSnapshot(snap => {
+    if (!snap.exists) { leaveStream(); return; }
+    const d = snap.data();
+    if (d.status === 'ended') { toast('Stream has ended', 'info'); leaveStream(); return; }
+
+    updateViewerScoreBar(d);
+    document.getElementById('v-viewer-count').textContent  = d.viewerCount || 0;
+    document.getElementById('v-online-count').textContent  = (d.viewerCount || 0) + ' online';
+
+    // New chunk available?
+    if (d.latestChunk && d.latestChunk !== currentPlayingUrl) {
+      const vid = document.getElementById('v-remote-video');
+      if (!currentPlayingUrl || vid.paused || vid.ended) {
+        // Play immediately
+        playChunk(d.latestChunk, d.latestChunkIndex || 1);
+      } else {
+        // Queue for when current segment ends
+        nextChunkUrl = d.latestChunk;
+        nextChunkIndex = d.latestChunkIndex || 1;
+      }
+    }
+  });
+  streamUnsubscribers.push(unsub);
+
+  // Subscribe to chat
+  subscribeComments(streamId, 'viewer');
 }
 
+let nextChunkIndex = 0;
+
+function playChunk(url, idx) {
+  currentPlayingUrl = url;
+  viewerChunkIndex = idx;
+
+  const vid     = document.getElementById('v-remote-video');
+  const overlay = document.getElementById('v-status-overlay');
+  const badge   = document.getElementById('v-segment-badge');
+
+  vid.src = url;
+  vid.load();
+
+  vid.oncanplay = () => {
+    overlay.classList.add('hidden-overlay');
+    vid.style.display = 'block';
+    badge.textContent  = 'Segment #' + idx;
+    badge.classList.add('show');
+    setTimeout(() => badge.classList.remove('show'), 3000);
+    vid.play().catch(() => {});
+    startViewerProgressBar(vid);
+  };
+
+  vid.onerror = () => {
+    setViewerStatus('error', '⚠️', 'Error loading segment', 'Retrying in 5s...');
+    setTimeout(() => {
+      if (currentPlayingUrl === url && currentStreamId) playChunk(url, idx);
+    }, 5000);
+  };
+
+  vid.onended = () => {
+    stopViewerProgressBar();
+    if (nextChunkUrl && nextChunkUrl !== currentPlayingUrl) {
+      const u = nextChunkUrl, i = nextChunkIndex;
+      nextChunkUrl = null; nextChunkIndex = 0;
+      playChunk(u, i);
+    } else {
+      // Segment ended, wait for next
+      vid.style.display = 'none';
+      setViewerStatus('waiting', '⏳', 'Next segment loading...', 'Uploaded every 2 minutes');
+    }
+  };
+}
+
+function startViewerProgressBar(vid) {
+  stopViewerProgressBar();
+  const fill = document.getElementById('v-chunk-fill');
+  viewerProgressInterval = setInterval(() => {
+    if (!vid.duration) return;
+    const pct = (vid.currentTime / vid.duration) * 100;
+    if (fill) fill.style.width = pct + '%';
+  }, 500);
+}
+
+function stopViewerProgressBar() {
+  clearInterval(viewerProgressInterval);
+  viewerProgressInterval = null;
+  const fill = document.getElementById('v-chunk-fill');
+  if (fill) fill.style.width = '0%';
+}
+
+function setViewerStatus(type, icon, text, sub) {
+  const overlay = document.getElementById('v-status-overlay');
+  const iconEl  = document.getElementById('v-status-icon');
+  const textEl  = document.getElementById('v-status-text');
+  const subEl   = document.getElementById('v-status-sub');
+  if (overlay) overlay.classList.remove('hidden-overlay');
+  if (iconEl)  iconEl.textContent  = icon;
+  if (textEl)  textEl.textContent  = text;
+  if (subEl)   subEl.textContent   = sub;
+}
+
+/* ============================================================
+   VIEWER SCORE BAR
+============================================================ */
+function updateViewerScoreBar(d) {
+  if (!d) return;
+  if (d.t1) {
+    document.getElementById('vsb-t1-name').textContent  = d.t1.name  || 'Team A';
+    document.getElementById('vsb-t1-score').textContent = d.t1.score ?? 0;
+  }
+  if (d.t2) {
+    document.getElementById('vsb-t2-name').textContent  = d.t2.name  || 'Team B';
+    document.getElementById('vsb-t2-score').textContent = d.t2.score ?? 0;
+  }
+  if (d.timer)  document.getElementById('vsb-timer').textContent  = d.timer;
+  if (d.period) document.getElementById('vsb-period').textContent = d.period;
+}
+
+/* ============================================================
+   VIEWERS LIST (host panel)
+============================================================ */
 function updateViewersList() {
   if (!currentStreamId) return;
   db.collection('streams').doc(currentStreamId).collection('viewers').get().then(snap => {
@@ -1061,10 +1533,10 @@ function updateViewersList() {
       return;
     }
     const colors = ['#00d4ff','#ff3346','#00e676','#ffc107','#e040fb','#ff6d00'];
-    el.innerHTML = snap.docs.map((d,i) => {
+    el.innerHTML = snap.docs.map((d, i) => {
       const data = d.data();
       return `<div class="viewer-item">
-        <div class="viewer-avatar" style="background:${colors[i%colors.length]}22;color:${colors[i%colors.length]}">${(data.name||'?')[0].toUpperCase()}</div>
+        <div class="viewer-avatar" style="background:${colors[i%colors.length]}22; color:${colors[i%colors.length]}">${(data.name||'?')[0].toUpperCase()}</div>
         <div>
           <div class="viewer-name">${escHtml(data.name||'Viewer')}</div>
           <div class="viewer-since">Watching live</div>
@@ -1075,151 +1547,30 @@ function updateViewersList() {
 }
 
 /* ============================================================
-   JOIN STREAM (Viewer)
-============================================================ */
-function focusJoin() { document.getElementById('join-code').focus(); }
-
-function joinStreamByCode() {
-  const code = v('join-code').trim().toUpperCase();
-  if (!code) { toast('Enter a stream code', 'error'); return; }
-  connectToStream(code);
-}
-
-async function connectToStream(streamId) {
-  currentStreamId = streamId;
-  isHost = false;
-
-  const snap = await db.collection('streams').doc(streamId).get();
-  if (!snap.exists || snap.data().status === 'ended') {
-    toast('Stream not found or has ended', 'error');
-    return;
-  }
-  const data = snap.data();
-
-  document.getElementById('v-stream-title').textContent = data.title;
-  document.getElementById('v-stream-meta').textContent = (data.sport || '') + ' • by ' + (data.hostName || 'Host');
-  showScreen('viewer');
-  updateViewerScoreBar(data);
-
-  // Create viewer peer connection
-  viewerPC = new RTCPeerConnection(ICE_SERVERS);
-
-  // CRITICAL FIX: Add transceivers so the viewer can receive video AND audio
-  viewerPC.addTransceiver('video', { direction: 'recvonly' });
-  viewerPC.addTransceiver('audio', { direction: 'recvonly' });
-
-  viewerPC.ontrack = e => {
-    console.log('ontrack fired:', e.track.kind, e.streams);
-    const vid = document.getElementById('v-remote-video');
-    if (e.streams && e.streams[0]) {
-      vid.srcObject = e.streams[0];
-    } else {
-      // Fallback: attach track manually
-      if (!vid.srcObject) vid.srcObject = new MediaStream();
-      vid.srcObject.addTrack(e.track);
-    }
-    document.getElementById('v-no-stream').style.display = 'none';
-    vid.style.display = 'block';
-    vid.play().catch(()=>{});
-  };
-
-  viewerPC.onicecandidate = e => {
-    if (e.candidate) {
-      db.collection('streams').doc(streamId)
-        .collection('signals').doc(userId)
-        .collection('viewerCandidates').add(e.candidate.toJSON());
-    }
-  };
-
-  viewerPC.onconnectionstatechange = () => {
-    const state = viewerPC.connectionState;
-    console.log('Viewer PC state:', state);
-    if (state === 'connected') toast('✅ Connected to stream!', 'success');
-    if (state === 'failed') toast('Connection failed. Try rejoining.', 'error');
-  };
-
-  viewerPC.oniceconnectionstatechange = () => {
-    console.log('ICE state:', viewerPC.iceConnectionState);
-  };
-
-  // Create offer
-  const offer = await viewerPC.createOffer();
-  await viewerPC.setLocalDescription(offer);
-
-  // Send offer to Firestore
-  await db.collection('streams').doc(streamId)
-    .collection('signals').doc(userId).set({
-      offer: { type: offer.type, sdp: offer.sdp },
-      viewerName: userName || userEmail || 'Viewer'
-    });
-
-  // Listen for host answer
-  const unsub1 = db.collection('streams').doc(streamId)
-    .collection('signals').doc(userId).onSnapshot(async docSnap => {
-      const d = docSnap.data();
-      if (d?.answer && viewerPC && !viewerPC.currentRemoteDescription) {
-        try {
-          await viewerPC.setRemoteDescription(new RTCSessionDescription(d.answer));
-        } catch(e) { console.error('setRemoteDescription error:', e); }
-      }
-    });
-  streamUnsubscribers.push(unsub1);
-
-  // Listen for host ICE candidates
-  const unsub2 = db.collection('streams').doc(streamId)
-    .collection('signals').doc(userId)
-    .collection('hostCandidates').onSnapshot(snap => {
-      snap.docChanges().forEach(c => {
-        if (c.type === 'added') {
-          viewerPC.addIceCandidate(new RTCIceCandidate(c.doc.data())).catch(()=>{});
-        }
-      });
-    });
-  streamUnsubscribers.push(unsub2);
-
-  // Listen for stream updates
-  const unsub3 = db.collection('streams').doc(streamId).onSnapshot(snap => {
-    if (!snap.exists) { leaveStream(); return; }
-    const d = snap.data();
-    if (d.status === 'ended') { toast('Stream has ended', 'info'); leaveStream(); return; }
-    updateViewerScoreBar(d);
-    document.getElementById('v-viewer-count').textContent = d.viewerCount || 0;
-    document.getElementById('v-online-count').textContent = (d.viewerCount || 0) + ' online';
-  });
-  streamUnsubscribers.push(unsub3);
-
-  subscribeComments(streamId, 'viewer');
-}
-
-function updateViewerScoreBar(d) {
-  if (!d) return;
-  if (d.t1) { document.getElementById('vsb-t1-name').textContent = d.t1.name || 'Team A'; document.getElementById('vsb-t1-score').textContent = d.t1.score ?? 0; }
-  if (d.t2) { document.getElementById('vsb-t2-name').textContent = d.t2.name || 'Team B'; document.getElementById('vsb-t2-score').textContent = d.t2.score ?? 0; }
-  if (d.timer) document.getElementById('vsb-timer').textContent = d.timer;
-  if (d.period) document.getElementById('vsb-period').textContent = d.period;
-}
-
-/* ============================================================
    SCORE CONTROLS
 ============================================================ */
 function updateScore(team, delta) {
   if (team === 1) {
     scores.t1 = Math.max(0, scores.t1 + delta);
     document.getElementById('t1-score-display').textContent = scores.t1;
-    document.getElementById('so-t1-score').textContent = scores.t1;
+    document.getElementById('so-t1-score').textContent      = scores.t1;
   } else {
     scores.t2 = Math.max(0, scores.t2 + delta);
     document.getElementById('t2-score-display').textContent = scores.t2;
-    document.getElementById('so-t2-score').textContent = scores.t2;
+    document.getElementById('so-t2-score').textContent      = scores.t2;
   }
-  if (currentStreamId) db.collection('streams').doc(currentStreamId).update({ [`t${team}.score`]: team===1?scores.t1:scores.t2 });
+  if (currentStreamId) {
+    db.collection('streams').doc(currentStreamId).update({
+      [`t${team}.score`]: team === 1 ? scores.t1 : scores.t2
+    });
+  }
 }
 
 function resetScores() {
   scores.t1 = 0; scores.t2 = 0;
   ['t1','t2'].forEach(t => {
     document.getElementById(`${t}-score-display`).textContent = 0;
-    document.getElementById(`so-${t}-score`).textContent = 0;
+    document.getElementById(`so-${t}-score`).textContent      = 0;
   });
   if (currentStreamId) db.collection('streams').doc(currentStreamId).update({ 't1.score': 0, 't2.score': 0 });
 }
@@ -1238,18 +1589,19 @@ function syncPeriod() {
 function updateMeta() {}
 
 /* ============================================================
-   TIMER
+   MATCH TIMER
 ============================================================ */
 function toggleTimer() {
   timerRunning = !timerRunning;
   const btn = document.querySelector('.timer-controls button');
   btn.textContent = timerRunning ? '⏸ Pause' : '▶ Resume';
+
   if (timerRunning) {
     timerInterval = setInterval(() => {
       timerSeconds++;
-      const m = String(Math.floor(timerSeconds/60)).padStart(2,'0');
-      const s = String(timerSeconds%60).padStart(2,'0');
-      const disp = m+':'+s;
+      const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const s = String(timerSeconds % 60).padStart(2, '0');
+      const disp = m + ':' + s;
       document.getElementById('timer-display').textContent = disp;
       if (currentStreamId) db.collection('streams').doc(currentStreamId).update({ timer: disp });
     }, 1000);
@@ -1259,7 +1611,8 @@ function toggleTimer() {
 }
 
 function resetTimer() {
-  clearInterval(timerInterval); timerRunning = false; timerSeconds = 0;
+  clearInterval(timerInterval);
+  timerRunning = false; timerSeconds = 0;
   document.getElementById('timer-display').textContent = '00:00';
   document.querySelector('.timer-controls button').textContent = '▶ Start';
   if (currentStreamId) db.collection('streams').doc(currentStreamId).update({ timer: '00:00' });
@@ -1270,7 +1623,8 @@ function resetTimer() {
 ============================================================ */
 function subscribeComments(streamId, side) {
   const unsub = db.collection('streams').doc(streamId)
-    .collection('comments').orderBy('ts')
+    .collection('comments')
+    .orderBy('ts')
     .onSnapshot(snap => {
       snap.docChanges().forEach(c => {
         if (c.type === 'added') appendComment(c.doc.data(), side);
@@ -1281,12 +1635,14 @@ function subscribeComments(streamId, side) {
 
 function appendComment(data, side) {
   const containerId = side === 'host' ? 's-chat-messages' : 'v-chat-messages';
-  const container = document.getElementById(containerId);
+  const container   = document.getElementById(containerId);
   if (!container) return;
-  // Remove placeholder
-  if (container.children.length === 1 && container.children[0].style.textAlign === 'center') {
-    container.children[0].remove();
+
+  // Clear "Chat will appear here" placeholder
+  if (container.children.length === 1 && container.children[0].textContent.includes('Chat will')) {
+    container.innerHTML = '';
   }
+
   const div = document.createElement('div');
   div.className = 'chat-msg' + (data.isHost ? ' host-msg' : '');
   div.innerHTML = `<div class="msg-meta"><strong>${escHtml(data.name)}</strong>${data.isHost ? ' 🎙 Host' : ''}</div><div class="msg-text">${escHtml(data.text)}</div>`;
@@ -1300,7 +1656,7 @@ function sendMessage(role) {
   if (!text || !currentStreamId) return;
   document.getElementById(inputId).value = '';
   db.collection('streams').doc(currentStreamId).collection('comments').add({
-    name: userName || userEmail || 'Anonymous',
+    name:   userName || 'Anonymous',
     text,
     isHost: role === 'host',
     userId,
@@ -1309,7 +1665,7 @@ function sendMessage(role) {
 }
 
 /* ============================================================
-   MEDIA CONTROLS
+   CONTROLS
 ============================================================ */
 function toggleVideo(el) {
   el.classList.toggle('on');
@@ -1331,16 +1687,28 @@ function switchTab(name, btn) {
 function copyStreamCode() {
   const code = document.getElementById('s-stream-code').textContent;
   navigator.clipboard.writeText(code)
-    .then(() => toast('📋 Stream code copied: ' + code, 'success'))
+    .then(() => toast('Stream code copied: ' + code, 'success'))
     .catch(() => toast('Code: ' + code, 'info'));
 }
 
 /* ============================================================
-   END / LEAVE
+   END / LEAVE STREAM
 ============================================================ */
 async function endStream() {
-  if (!confirm('End the live stream?')) return;
-  if (currentStreamId) await db.collection('streams').doc(currentStreamId).update({ status: 'ended' });
+  if (!confirm('End the live stream for all viewers?')) return;
+
+  // Stop recording immediately
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    setUploadStatusUploading();
+    mediaRecorder.stop(); // will trigger onstop → upload final chunk
+  }
+  clearTimeout(chunkCycleInterval);
+  clearChunkCountdown();
+
+  if (currentStreamId) {
+    await db.collection('streams').doc(currentStreamId).update({ status: 'ended' });
+  }
+
   cleanup();
   showScreen('home');
   toast('Stream ended', 'info');
@@ -1349,13 +1717,10 @@ async function endStream() {
 async function leaveStream() {
   if (currentStreamId && !isHost) {
     await db.collection('streams').doc(currentStreamId)
-      .collection('signals').doc(userId).delete().catch(()=>{});
+      .collection('viewers').doc(userId).delete().catch(() => {});
     db.collection('streams').doc(currentStreamId).update({
       viewerCount: firebase.firestore.FieldValue.increment(-1)
-    }).catch(()=>{});
-    // Remove from viewers list
-    db.collection('streams').doc(currentStreamId)
-      .collection('viewers').doc(userId).delete().catch(()=>{});
+    }).catch(() => {});
   }
   cleanup();
   showScreen('home');
@@ -1364,38 +1729,68 @@ async function leaveStream() {
 function cleanup() {
   streamUnsubscribers.forEach(u => u());
   streamUnsubscribers = [];
-  Object.values(peerConnections).forEach(pc => pc.close());
-  peerConnections = {};
-  if (viewerPC) { viewerPC.close(); viewerPC = null; }
+
+  // Stop recording
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+  }
+  mediaRecorder = null;
+  clearTimeout(chunkCycleInterval);
+  clearChunkCountdown();
+  recordedChunks = [];
+  chunkIndex = 0;
+
+  // Stop local media
   if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+
+  // Stop match timer
   clearInterval(timerInterval);
   timerRunning = false; timerSeconds = 0;
-  currentStreamId = null;
-  const remoteVid = document.getElementById('v-remote-video');
-  remoteVid.srcObject = null;
-  remoteVid.style.display = 'none';
-  document.getElementById('v-no-stream').style.display = '';
-  document.getElementById('s-local-video').srcObject = null;
+
+  // Viewer cleanup
+  stopViewerProgressBar();
+  currentPlayingUrl = null;
+  nextChunkUrl = null;
+
+  const vid = document.getElementById('v-remote-video');
+  if (vid) { vid.src = ''; vid.style.display = 'none'; }
+  setViewerStatus('idle', '📡', 'Connecting to stream...', 'This may take a moment');
+  document.getElementById('v-status-overlay')?.classList.remove('hidden-overlay');
+
+  const sVid = document.getElementById('s-local-video');
+  if (sVid) sVid.srcObject = null;
+
+  // Reset scores
   scores.t1 = 0; scores.t2 = 0;
-  document.getElementById('s-chat-messages').innerHTML = '<div style="text-align:center;padding:2rem 0;color:var(--text3);font-size:0.82rem;">Chat will appear here</div>';
-  document.getElementById('v-chat-messages').innerHTML = '';
-  document.getElementById('s-live-badge').style.display = 'none';
+
+  // Reset chat
+  const sc = document.getElementById('s-chat-messages');
+  if (sc) sc.innerHTML = '<div style="text-align:center;padding:2rem 0;color:var(--text3);font-size:0.82rem;">Chat will appear here</div>';
+  const vc = document.getElementById('v-chat-messages');
+  if (vc) vc.innerHTML = '';
+
+  currentStreamId = null;
 }
 
 /* ============================================================
    UTILS
 ============================================================ */
 function v(id) { return document.getElementById(id)?.value || ''; }
-function genId() { return Math.random().toString(36).substr(2,6).toUpperCase(); }
-function escHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function genId() { return Math.random().toString(36).substr(2, 6).toUpperCase(); }
+function escHtml(t) { return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function toast(msg, type='info') {
+function toast(msg, type = 'info') {
   const el = document.createElement('div');
   el.className = `toast ${type}`;
   el.textContent = msg;
   document.getElementById('toast-container').appendChild(el);
-  setTimeout(() => el.remove(), 4000);
+  setTimeout(() => el.remove(), 4500);
 }
+
+/* ============================================================
+   INIT
+============================================================ */
+autoInit();
 </script>
 </body>
 </html>
