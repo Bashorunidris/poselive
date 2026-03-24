@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LivePulse — Real-Time Streaming</title>
+  <title>POSE LIVE SPORTS — Powered by REWARDER • Approved by BAMI</title>
 
   <!-- Firebase v10 Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -177,6 +177,7 @@
     }
     .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.06em; margin-bottom: 0.25rem; }
     .logo span { color: var(--accent); }
+    .logo-tagline { font-size: 0.75rem; color: var(--text2); letter-spacing: 0.05em; text-transform: uppercase; }
     .auth-subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
     .auth-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.75rem; }
     .auth-tab {
@@ -502,7 +503,231 @@
     }
     .chunk-indicator.live { color: var(--green); border-color: var(--green); }
 
-    @media (max-width: 768px) {
+    /* FOOTER BRANDING */
+    .footer-branding {
+      position: fixed; bottom: 0; right: 0;
+      font-size: 0.65rem; color: var(--text3);
+      padding: 0.6rem 1.2rem;
+      background: rgba(0,0,0,0.4);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-left: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      z-index: 50;
+    }
+    .footer-branding span { color: var(--accent); font-weight: 600; }
+
+    /* LIVE STREAMS MODAL - FULLSCREEN */
+    #live-streams-modal-backdrop {
+      position: fixed !important;
+      inset: 0 !important;
+      background: var(--bg) !important;
+      backdrop-filter: none !important;
+      display: flex !important;
+      align-items: stretch !important;
+      justify-content: stretch !important;
+      z-index: 5000 !important;
+    }
+    #live-streams-modal-backdrop.hidden { display: none !important; }
+    .live-streams-modal {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      background: var(--bg) !important;
+      border: none !important;
+      display: flex !important;
+      flex-direction: column !important;
+      animation: none !important;
+    }
+    .live-streams-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-shrink: 0;
+    }
+    .live-streams-header h2 {
+      margin: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+    }
+    .live-streams-header-info { flex: 1; }
+    .live-streams-header p { margin: 0; color: var(--text2); font-size: 0.9rem; }
+    .live-streams-close {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--r);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .live-streams-close:hover { background: var(--surface2); color: var(--text); }
+    
+    .live-streams-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .streams-ad-banner {
+      background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(0,212,255,0.08) 100%);
+      border: 2px solid var(--accent);
+      border-radius: var(--r2);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .streams-ad-banner strong { color: var(--accent); font-size: 1.3rem; display: block; margin-bottom: 0.5rem; }
+    .streams-ad-banner p { font-size: 0.95rem; color: var(--text2); margin-bottom: 1rem; }
+    .streams-ad-btn { background: var(--accent); color: #000; padding: 0.7rem 1.5rem; border: none; border-radius: var(--r); font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: filter 0.2s; }
+    .streams-ad-btn:hover { filter: brightness(1.1); }
+    
+    .streams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .stream-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--r2);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .stream-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,212,255,0.1);
+    }
+    .stream-card-header {
+      background: linear-gradient(135deg, var(--accent-dim), var(--accent));
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+    .stream-live-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.65rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .stream-live-badge::before { content: '●'; animation: pulse 1.2s infinite; }
+    .stream-sport { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .stream-sport-name { font-size: 0.8rem; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .stream-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .stream-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .stream-host {
+      font-size: 0.85rem;
+      color: var(--text2);
+      margin-bottom: 1.25rem;
+    }
+    
+    .stream-teams {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .stream-team {
+      text-align: center;
+    }
+    .team-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 0.5rem;
+      border: 2px solid var(--border2);
+    }
+    .team-name { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
+    .team-name-text { color: var(--text); display: block; }
+    .team-abbr { color: var(--text2); font-size: 0.75rem; }
+    
+    .stream-score {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .score-t1 { color: var(--accent); }
+    .score-t2 { color: var(--red); }
+    .score-sep { color: var(--text3); font-size: 1.5rem; }
+    
+    .stream-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text2);
+    }
+    .stream-viewers { display: flex; align-items: center; gap: 4px; color: var(--green); font-weight: 600; }
+    .stream-viewers::before { content: '●'; }
+    .stream-period { text-align: right; }
+    
+    .empty-streams {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text3);
+      font-size: 1.1rem;
+    }
+    .empty-streams-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    
+    .streams-manual-join {
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      text-align: center;
+    }
+    .streams-manual-join-label { font-size: 0.85rem; color: var(--text2); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .streams-manual-join-inputs { display: flex; gap: 0.75rem; }
+    .streams-manual-join-inputs input { flex: 1; }
+    .streams-manual-join-inputs button { flex-shrink: 0; }
+
+    /* STREAM CARD ANIMATION */
+    @keyframes slideInCard { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: none; }
+    }
+    .stream-card { animation: slideInCard 0.4s ease; }
+
+     @media (max-width: 768px) {
       .streamer-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
       .right-panel { height: 320px; border-left: none; border-top: 1px solid var(--border); }
       .viewer-body { grid-template-columns: 1fr; grid-template-rows: 1fr 300px; }
@@ -518,8 +743,10 @@
 <!-- ===================== AUTH SCREEN ===================== -->
 <div id="screen-auth" class="screen active">
   <div class="auth-card">
-    <div class="logo">Live<span>Pulse</span></div>
-    <div class="auth-subtitle">Real-time sports streaming platform</div>
+    <div class="logo">POSE<span>LIVE</span></div>
+    <div class="logo-tagline">POWERED BY REWARDER</div>
+    <div class="logo-tagline" style="color: var(--green); margin-bottom: 1rem;">APPROVED BY BAMI</div>
+    <div class="auth-subtitle">Sports Streaming. Real-time Scores. Instant Chat.</div>
 
     <div class="auth-tabs">
       <button class="auth-tab active" id="tab-login-btn" onclick="switchAuthTab('login')">Sign In</button>
@@ -568,18 +795,20 @@
     <button class="btn-ghost" style="font-size:0.8rem; padding:0.45rem 0.9rem;" onclick="doLogout()">Sign Out</button>
   </div>
   <div class="home-inner">
-    <div class="home-logo">Live<span>Pulse</span></div>
-    <p class="home-tagline">Stream live events. Real-time scores. Instant chat.</p>
+    <div class="home-logo">POSE<span>LIVE</span></div>
+    <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.25rem;">POWERED BY REWARDER</div>
+    <div style="font-size: 0.7rem; letter-spacing: 0.08em; color: var(--green); text-transform: uppercase; margin-bottom: 1rem;">APPROVED BY BAMI</div>
+    <p class="home-tagline">Sports Streaming. Real-time Scores. Instant Chat.</p>
     <div class="home-cards">
       <div class="home-card" onclick="openCreateModal()">
         <div class="card-icon">📡</div>
         <h3>Go Live</h3>
         <p>Start streaming your event to viewers</p>
       </div>
-      <div class="home-card" onclick="focusJoin()">
+      <div class="home-card" onclick="openLiveStreamsModal()">
         <div class="card-icon">📺</div>
         <h3>Watch Live</h3>
-        <p>Join a stream with a stream code</p>
+        <p>Browse all live streams</p>
       </div>
     </div>
     <div class="home-divider">or enter a stream code</div>
@@ -593,7 +822,7 @@
 <!-- ===================== STREAMER SCREEN ===================== -->
 <div id="screen-streamer" class="screen">
   <div class="streamer-header">
-    <div class="logo-small">Live<span>Pulse</span></div>
+    <div class="logo-small" title="Powered by REWARDER • Approved by BAMI">POSE<span>LIVE</span></div>
     <div class="live-badge" id="s-live-badge" style="display:none;">LIVE</div>
     <div class="stream-info-header">
       <div class="stream-title-header" id="s-stream-title">—</div>
@@ -726,7 +955,7 @@
 <!-- ===================== VIEWER SCREEN ===================== -->
 <div id="screen-viewer" class="screen">
   <div class="viewer-header">
-    <div class="logo-small">Live<span>Pulse</span></div>
+    <div class="logo-small" title="Powered by REWARDER • Approved by BAMI">POSE<span>LIVE</span></div>
     <div class="live-badge" id="v-live-badge">LIVE</div>
     <div style="flex:1;">
       <div style="font-size:0.95rem; font-weight:600;" id="v-stream-title">Loading...</div>
@@ -837,12 +1066,53 @@
       <button class="btn-primary" onclick="startStream()">📡 Go Live</button>
     </div>
   </div>
-</div>
+  </div>
 
-<script>
-/* ============================================================
-   CLOUDINARY CONFIG
-============================================================ */
+  <!-- LIVE STREAMS MODAL - FULLSCREEN -->
+  <div class="modal-backdrop hidden" id="live-streams-modal-backdrop">
+    <div class="modal live-streams-modal">
+      <!-- HEADER -->
+      <div class="live-streams-header">
+        <div class="live-streams-header-info">
+          <h2>📺 LIVE STREAMS</h2>
+          <p id="streams-count-text">Loading live streams...</p>
+        </div>
+        <button class="live-streams-close" onclick="closeLiveStreamsModal()">✕ Close</button>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="live-streams-content">
+        <!-- AD BANNER -->
+        <div class="streams-ad-banner">
+          <strong>🎬 START HOSTING WITH POSE LIVE</strong>
+          <p>Stream your sports event live to thousands of viewers. Go live in seconds!</p>
+          <button class="streams-ad-btn" onclick="closeLiveStreamsModal(); openCreateModal();">🚀 Go Live Now</button>
+        </div>
+
+        <!-- STREAMS GRID -->
+        <div class="streams-grid" id="streams-grid">
+          <div class="empty-streams">
+            <div class="empty-streams-icon">📡</div>
+            <div>Loading live streams...</div>
+          </div>
+        </div>
+
+        <!-- MANUAL JOIN SECTION -->
+        <div class="streams-manual-join">
+          <div class="streams-manual-join-label">OR ENTER A STREAM CODE</div>
+          <div class="streams-manual-join-inputs">
+            <input type="text" id="modal-join-code" placeholder="Enter stream code (e.g. ABC123)" style="text-transform:uppercase; letter-spacing:0.1em; font-family:'JetBrains Mono',monospace;" maxlength="8" />
+            <button class="btn-primary" onclick="modalJoinByCode()">Join</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* ============================================================
+  CLOUDINARY CONFIG
+  ============================================================ */
 const CLOUDINARY_CLOUD_NAME  = 'dzhdgxjhl';
 const CLOUDINARY_UPLOAD_PRESET = 'posepreset';
 const CLOUDINARY_API_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`;
@@ -904,10 +1174,14 @@ let countdownInterval = null;
           userName = snap.exists ? (snap.data().displayName || user.email) : user.email;
           updateHomeUserBadge();
           showScreen('home');
+          // Start listening to live streams in background once authenticated
+          startBackgroundStreamListener();
         }).catch(() => {
           userName = user.email;
           updateHomeUserBadge();
           showScreen('home');
+          // Start listening to live streams in background once authenticated
+          startBackgroundStreamListener();
         });
       } else {
         showScreen('auth');
@@ -1002,6 +1276,302 @@ function openCreateModal() {
   document.getElementById('m-title').focus();
 }
 function closeCreateModal() { document.getElementById('create-modal').classList.add('hidden'); }
+
+/* ============================================================
+   LIVE STREAMS MODAL
+============================================================ */
+let liveStreamsUnsubscriber = null;
+let currentStreamIds = new Set();
+let backgroundStreamListener = null;
+let isModalStreamLoaded = false;
+
+// Start listening to live streams in background (always active)
+function startBackgroundStreamListener() {
+  if (backgroundStreamListener) return; // Already listening
+  
+  backgroundStreamListener = db.collection('streams')
+    .where('active', '==', true)
+    .limit(20)
+    .onSnapshot(snapshot => {
+      // Just update the current stream IDs in background
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          currentStreamIds.add(change.doc.id);
+        } else if (change.type === 'removed') {
+          currentStreamIds.delete(change.doc.id);
+        }
+      });
+    });
+}
+
+function openLiveStreamsModal() {
+  document.getElementById('live-streams-modal-backdrop').classList.remove('hidden');
+  isModalStreamLoaded = false;
+  subscribeToLiveStreams();
+}
+
+function closeLiveStreamsModal() {
+  document.getElementById('live-streams-modal-backdrop').classList.add('hidden');
+  if (liveStreamsUnsubscriber) {
+    liveStreamsUnsubscriber();
+    liveStreamsUnsubscriber = null;
+  }
+}
+
+function buildStreamCard(doc, data) {
+  const streamId = doc.id;
+  
+  // Get sport emoji
+  const sportEmojis = {
+    '⚽ Football': '⚽',
+    '🏀 Basketball': '🏀',
+    '🏈 American Football': '🏈',
+    '🎾 Tennis': '🎾',
+    '🏐 Volleyball': '🏐',
+    '🏑 Hockey': '🏑',
+    '🎮 Esports': '🎮',
+    '🏆 Other': '🏆'
+  };
+  const sportEmoji = sportEmojis[data.sport] || '⚽';
+  const sportName = data.sport?.replace(/^[^A-Z]*/, '') || 'Football';
+  
+  // Team info
+  const t1Name = data.t1?.name || 'Team A';
+  const t2Name = data.t2?.name || 'Team B';
+  const t1Abbr = t1Name.substring(0, 3).toUpperCase();
+  const t2Abbr = t2Name.substring(0, 3).toUpperCase();
+  const t1Score = data.t1?.score ?? 0;
+  const t2Score = data.t2?.score ?? 0;
+  const period = data.period || '1st Half';
+  const viewers = data.viewers || 0;
+  
+  const html = `
+    <div class="stream-card" onclick="joinStreamFromModal('${streamId}')" data-stream-id="${streamId}">
+      <div class="stream-card-header">
+        <div class="stream-live-badge">LIVE</div>
+        <div class="stream-sport">${sportEmoji}</div>
+        <div class="stream-sport-name">${escHtml(sportName)}</div>
+      </div>
+      <div class="stream-card-body">
+        <div class="stream-title">${escHtml(data.title || 'Live Event')}</div>
+        <div class="stream-host">🎙 ${escHtml(data.host || 'Unknown Host')}</div>
+        
+        <div class="stream-teams">
+          <div class="stream-team">
+            <div class="team-icon">${sportEmoji}</div>
+            <div class="team-name">
+              <span class="team-name-text">${escHtml(t1Name)}</span>
+              <span class="team-abbr">${t1Abbr}</span>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <div class="stream-score">
+              <span class="score-t1">${t1Score}</span>
+              <span class="score-sep">:</span>
+              <span class="score-t2">${t2Score}</span>
+            </div>
+          </div>
+          <div class="stream-team">
+            <div class="team-icon">${sportEmoji}</div>
+            <div class="team-name">
+              <span class="team-name-text">${escHtml(t2Name)}</span>
+              <span class="team-abbr">${t2Abbr}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stream-footer">
+          <span class="stream-viewers">${viewers} watching</span>
+          <span class="stream-period">${escHtml(period)}</span>
+        </div>
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+function subscribeToLiveStreams() {
+  // Reset on modal open and immediately fetch all streams
+  const grid = document.getElementById('streams-grid');
+  const countText = document.getElementById('streams-count-text');
+  
+  if (!grid || !countText) {
+    console.error('Grid or countText element not found');
+    return;
+  }
+  
+  grid.innerHTML = '';
+  countText.textContent = 'Loading streams...';
+  
+  // Clear previous stream tracking for fresh load
+  currentStreamIds.clear();
+  isModalStreamLoaded = false;
+  
+  // Real-time listener for all active streams with doc change detection
+  liveStreamsUnsubscriber = db.collection('streams')
+    .where('active', '==', true)
+    .limit(20)
+    .onSnapshot(snapshot => {
+      try {
+        const grid = document.getElementById('streams-grid');
+        const countText = document.getElementById('streams-count-text');
+        
+        if (!grid || !countText) {
+          console.error('Grid or countText element not found in snapshot');
+          return;
+        }
+        
+        // Track changes: added, modified, removed
+        const docChanges = snapshot.docChanges();
+        
+        // First load - populate grid with all current streams
+        if (!isModalStreamLoaded) {
+          isModalStreamLoaded = true;
+          
+          if (snapshot.empty) {
+            grid.innerHTML = `
+              <div class="empty-streams" style="grid-column: 1/-1;">
+                <div class="empty-streams-icon">📡</div>
+                <div>No live streams at the moment.</div>
+                <div style="font-size: 0.95rem; color: var(--text3); margin-top: 0.5rem;">Be the first to go live!</div>
+              </div>
+            `;
+            countText.textContent = '0 streams live';
+            console.log('No live streams available');
+            return;
+          }
+          
+          // Add all streams to grid
+          console.log('First load: Found', snapshot.size, 'streams');
+          snapshot.forEach(doc => {
+            currentStreamIds.add(doc.id);
+            const html = buildStreamCard(doc, doc.data());
+            grid.insertAdjacentHTML('beforeend', html);
+          });
+          countText.textContent = snapshot.size + ' stream' + (snapshot.size !== 1 ? 's' : '') + ' live';
+          return;
+        }
+      
+      // Subsequent updates - detect changes smartly
+      docChanges.forEach(change => {
+        const doc = change.doc;
+        const data = doc.data();
+        const streamId = doc.id;
+        
+        if (change.type === 'added') {
+          // New stream started - add to top without reloading
+          currentStreamIds.add(streamId);
+          
+          // Remove empty state if exists
+          const emptyState = grid.querySelector('.empty-streams');
+          if (emptyState) emptyState.remove();
+          
+          // Add new stream card at the beginning
+          const html = buildStreamCard(doc, data);
+          grid.insertAdjacentHTML('afterbegin', html);
+          
+        } else if (change.type === 'modified') {
+          // Stream updated - update specific card
+          const card = grid.querySelector(`[data-stream-id="${streamId}"]`);
+          if (card) {
+            // Update only the changed fields
+            const scoreSpans = card.querySelectorAll('.stream-score span');
+            if (scoreSpans.length >= 3) {
+              scoreSpans[0].textContent = data.t1?.score ?? 0;
+              scoreSpans[2].textContent = data.t2?.score ?? 0;
+            }
+            
+            // Update viewers
+            const viewersSpan = card.querySelector('.stream-viewers');
+            if (viewersSpan) {
+              const viewers = data.viewers || 0;
+              viewersSpan.innerHTML = `● ${viewers} watching`;
+            }
+            
+            // Update period
+            const periodSpan = card.querySelector('.stream-period');
+            if (periodSpan) {
+              periodSpan.textContent = data.period || '1st Half';
+            }
+          }
+          
+        } else if (change.type === 'removed') {
+          // Stream ended - remove card
+          currentStreamIds.delete(streamId);
+          const card = grid.querySelector(`[data-stream-id="${streamId}"]`);
+          if (card) {
+            card.style.animation = 'slideInCard 0.4s ease reverse';
+            setTimeout(() => card.remove(), 400);
+          }
+          
+          // Show empty state if no more streams
+          if (currentStreamIds.size === 0) {
+            grid.innerHTML = `
+              <div class="empty-streams" style="grid-column: 1/-1;">
+                <div class="empty-streams-icon">📡</div>
+                <div>No live streams at the moment.</div>
+                <div style="font-size: 0.95rem; color: var(--text3); margin-top: 0.5rem;">Be the first to go live!</div>
+              </div>
+            `;
+          }
+        }
+      });
+      
+        // Update count smoothly
+        countText.textContent = snapshot.size + ' stream' + (snapshot.size !== 1 ? 's' : '') + ' live';
+      } catch (err) {
+        console.error('Error in snapshot handler:', err);
+      }
+    }, error => {
+      console.error('Live streams subscription error:', error);
+      const grid = document.getElementById('streams-grid');
+      if (grid) {
+        grid.innerHTML = `<div class="empty-streams" style="grid-column: 1/-1;">
+          <div class="empty-streams-icon">⚠️</div>
+          <div>Error loading streams</div>
+          <div style="font-size: 0.8rem; color: var(--text3); margin-top: 0.5rem;">${error.message}</div>
+        </div>`;
+      }
+    });
+}
+
+/* DEBUG HELPER */
+window.debugStreams = function() {
+  console.log('=== STREAMS DEBUG ===');
+  console.log('Current Stream IDs:', currentStreamIds);
+  console.log('Modal Loaded:', isModalStreamLoaded);
+  console.log('Background Listener Active:', !!backgroundStreamListener);
+  console.log('Modal Unsubscriber Active:', !!liveStreamsUnsubscriber);
+  
+  if (db) {
+    db.collection('streams').where('active', '==', true).get().then(snap => {
+      console.log('Active streams in Firestore:', snap.size);
+      snap.forEach(doc => {
+        console.log(`- ${doc.id}:`, doc.data());
+      });
+    });
+  }
+};
+
+window.testModalOpen = function() {
+  console.log('Opening modal...');
+  openLiveStreamsModal();
+};
+
+function joinStreamFromModal(streamId) {
+  closeLiveStreamsModal();
+  currentStreamId = streamId;
+  switchScreen('viewer');
+  subscribeToStream(streamId);
+}
+
+function modalJoinByCode() {
+  const code = document.getElementById('modal-join-code').value.trim().toUpperCase();
+  if (!code) { toast('Enter a stream code', 'error'); return; }
+  closeLiveStreamsModal();
+  document.getElementById('join-code').value = code;
+  joinStreamByCode();
+}
 
 async function startStream() {
   const title  = v('m-title').trim();
@@ -1668,5 +2238,11 @@ function toast(msg, type='info') {
   setTimeout(() => el.remove(), 4000);
 }
 </script>
+
+<!-- FOOTER BRANDING -->
+<div class="footer-branding">
+  <span>POSE</span> Live Sports • Powered by <span>REWARDER</span> • Approved by <span>BAMI</span>
+</div>
+
 </body>
 </html>
