@@ -808,6 +808,188 @@
     .streams-manual-join-inputs input { flex: 1; }
     .streams-manual-join-inputs button { flex-shrink: 0; }
 
+    /* WATCH LIVE MODAL - PAST MATCHES & ROSTER */
+    .watch-live-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .watch-live-tab {
+      flex: 1;
+      padding: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text2);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .watch-live-tab:hover { color: var(--text); }
+    .watch-live-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    
+    .past-matches-list {
+      display: grid;
+      gap: 1rem;
+    }
+    .past-match-item {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r2);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .past-match-item:hover { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+    .past-match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .past-match-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .past-match-date {
+      font-size: 0.8rem;
+      color: var(--text2);
+    }
+    .past-match-score {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .past-team {
+      flex: 1;
+      text-align: center;
+    }
+    .past-team-name { font-size: 0.85rem; color: var(--text2); }
+    .past-team-score { font-size: 1.8rem; font-weight: 700; }
+    .past-match-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .past-stat { text-align: center; }
+    .past-stat-label { font-size: 0.75rem; color: var(--text2); }
+    .past-stat-value { font-size: 0.9rem; color: var(--accent); font-weight: 600; }
+    .past-match-motm {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--surface);
+      border-radius: 6px;
+      border-left: 3px solid var(--green);
+    }
+    .motm-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text2); }
+    .motm-name { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+
+    /* PLAYERS & ROSTER */
+    .players-roster-section {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--r2);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .players-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .players-header h3 { margin: 0; color: var(--accent); }
+    .add-player-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--r);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .add-player-btn:hover { filter: brightness(1.1); }
+    
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .player-card {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      padding: 1rem;
+      position: relative;
+    }
+    .player-card-remove {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: transparent;
+      border: none;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0;
+    }
+    .player-card-remove:hover { color: var(--red); }
+    
+    .player-info { margin-bottom: 0.75rem; }
+    .player-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text2); }
+    .player-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    
+    .team-selector {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .team-selector button {
+      flex: 1;
+      padding: 0.6rem;
+      border: 2px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      border-radius: var(--r);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .team-selector button.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    
+    .coach-section {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .coach-section h4 { margin-top: 0; color: var(--accent); font-size: 0.9rem; }
+    .coach-info { display: grid; gap: 0.75rem; }
+    .coach-info input {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 0.6rem;
+      border-radius: var(--r);
+      font-size: 0.9rem;
+    }
+
     /* STREAM CARD ANIMATION */
     @keyframes slideInCard { 
       from { opacity: 0; transform: translateY(20px); } 
@@ -1280,20 +1462,37 @@
           <button class="streams-ad-btn" onclick="closeLiveStreamsModal(); openCreateModal();">🚀 Go Live Now</button>
         </div>
 
-        <!-- STREAMS GRID -->
-        <div class="streams-grid" id="streams-grid">
-          <div class="empty-streams">
-            <div class="empty-streams-icon">📡</div>
-            <div>Loading live streams...</div>
+        <!-- TAB NAVIGATION -->
+        <div class="watch-live-tabs">
+          <button class="watch-live-tab active" onclick="switchWatchTab('live', this)">📡 LIVE STREAMS</button>
+          <button class="watch-live-tab" onclick="switchWatchTab('past', this)">📊 PAST MATCHES</button>
+        </div>
+
+        <!-- LIVE STREAMS TAB -->
+        <div id="watch-tab-live">
+          <!-- STREAMS GRID -->
+          <div class="streams-grid" id="streams-grid">
+            <div class="empty-streams">
+              <div class="empty-streams-icon">📡</div>
+              <div>Loading live streams...</div>
+            </div>
+          </div>
+
+          <!-- MANUAL JOIN SECTION -->
+          <div class="streams-manual-join">
+            <div class="streams-manual-join-label">OR ENTER A STREAM CODE</div>
+            <div class="streams-manual-join-inputs">
+              <input type="text" id="modal-join-code" placeholder="Enter stream code (e.g. ABC123)" style="text-transform:uppercase; letter-spacing:0.1em; font-family:'JetBrains Mono',monospace;" maxlength="8" />
+              <button class="btn-primary" onclick="modalJoinByCode()">Join</button>
+            </div>
           </div>
         </div>
 
-        <!-- MANUAL JOIN SECTION -->
-        <div class="streams-manual-join">
-          <div class="streams-manual-join-label">OR ENTER A STREAM CODE</div>
-          <div class="streams-manual-join-inputs">
-            <input type="text" id="modal-join-code" placeholder="Enter stream code (e.g. ABC123)" style="text-transform:uppercase; letter-spacing:0.1em; font-family:'JetBrains Mono',monospace;" maxlength="8" />
-            <button class="btn-primary" onclick="modalJoinByCode()">Join</button>
+        <!-- PAST MATCHES TAB -->
+        <div id="watch-tab-past" style="display: none;">
+          <h3 style="margin-top: 0;">📊 Match History</h3>
+          <div class="past-matches-list" id="past-matches-list">
+            <div style="text-align: center; padding: 2rem; color: var(--text3);">No past matches yet</div>
           </div>
         </div>
       </div>
@@ -2639,6 +2838,161 @@ function addCustomStat() {
 }
 
 /* ============================================================
+   WATCH LIVE - PAST MATCHES & ROSTER
+============================================================ */
+let selectedTeamForRoster = 1;
+let streamPlayers = { t1: [], t2: [] };
+let streamCoaches = { t1: '', t2: '' };
+
+function switchWatchTab(tab, btn) {
+  // Hide all tabs
+  document.getElementById('watch-tab-live').style.display = 'none';
+  document.getElementById('watch-tab-past').style.display = 'none';
+  
+  // Show selected tab
+  document.getElementById(`watch-tab-${tab}`).style.display = 'block';
+  
+  // Update button styling
+  document.querySelectorAll('.watch-live-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  // Load data if needed
+  if (tab === 'past') {
+    loadPastMatches();
+  }
+}
+
+function loadPastMatches() {
+  // Only load past matches if user is currently watching a live stream
+  if (!isHost && !currentStreamId) {
+    const list = document.getElementById('past-matches-list');
+    list.innerHTML = `
+      <div style="text-align: center; padding: 3rem 2rem; color: var(--text3);">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📺</div>
+        <div style="font-size: 0.95rem;">Join a live stream to view past match analysis</div>
+        <div style="font-size: 0.8rem; margin-top: 0.5rem;">Past matches are available during and after live streams</div>
+      </div>
+    `;
+    return;
+  }
+  
+  // Fetch ended streams - only if user is in a stream
+  if (!db) return;
+  
+  db.collection('streams')
+    .where('active', '==', false)
+    .orderBy('createdAt', 'desc')
+    .limit(20)
+    .get()
+    .then(snap => {
+      const list = document.getElementById('past-matches-list');
+      
+      if (snap.empty) {
+        list.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text3);">No past matches yet</div>';
+        return;
+      }
+      
+      list.innerHTML = '';
+      snap.forEach(doc => {
+        const d = doc.data();
+        const motm = d.manOfMatchVotes ? Object.entries(d.manOfMatchVotes).sort((a,b) => b[1]-a[1])[0] : null;
+        const endDate = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleDateString() : 'Unknown';
+        
+        const html = `
+          <div class="past-match-item">
+            <div class="past-match-header">
+              <div class="past-match-title">${escHtml(d.title || 'Match')}</div>
+              <div class="past-match-date">${endDate}</div>
+            </div>
+            
+            <div class="past-match-score">
+              <div class="past-team">
+                <div class="past-team-name">${escHtml(d.t1?.name || 'Team A')}</div>
+                <div class="past-team-score">${d.t1?.score || 0}</div>
+              </div>
+              <div style="color: var(--text2);">vs</div>
+              <div class="past-team">
+                <div class="past-team-name">${escHtml(d.t2?.name || 'Team B')}</div>
+                <div class="past-team-score">${d.t2?.score || 0}</div>
+              </div>
+            </div>
+            
+            ${d.stats ? `
+              <div class="past-match-stats">
+                <div class="past-stat">
+                  <div class="past-stat-label">⏱️ Duration</div>
+                  <div class="past-stat-value">${d.matchLength || '—'} min</div>
+                </div>
+                <div class="past-stat">
+                  <div class="past-stat-label">👥 Viewers</div>
+                  <div class="past-stat-value">${d.stats?.finalViewers || d.viewers || '—'}</div>
+                </div>
+                <div class="past-stat">
+                  <div class="past-stat-label">📍 Venue</div>
+                  <div class="past-stat-value">${d.venue ? d.venue.substring(0, 15) + (d.venue.length > 15 ? '...' : '') : '—'}</div>
+                </div>
+              </div>
+            ` : ''}
+            
+            ${motm ? `
+              <div class="past-match-motm">
+                <div class="motm-label">🏆 Man of the Match</div>
+                <div class="motm-name">${escHtml(motm[0])} (${motm[1]} votes)</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        list.insertAdjacentHTML('beforeend', html);
+      });
+    })
+    .catch(e => console.error('Error loading past matches:', e));
+}
+
+function showRosterModal() {
+  alert('🏃 Player Roster Management:\n\n1. Team 1 & 2 player lists\n2. Add name, position\n3. Coach info\n4. Sync with stream\n\nFeature coming in detailed viewer!');
+}
+
+function addPlayerToRoster() {
+  const name = prompt('Player Name:');
+  if (!name) return;
+  
+  const position = prompt('Position:');
+  if (!position) return;
+  
+  const player = {
+    id: 'p_' + Date.now(),
+    name: name,
+    position: position,
+    stats: { goals: 0, assists: 0, rating: 0 }
+  };
+  
+  streamPlayers[`t${selectedTeamForRoster}`].push(player);
+  
+  if (currentStreamId) {
+    db.collection('streams').doc(currentStreamId).update({
+      [`players.t${selectedTeamForRoster}`]: streamPlayers[`t${selectedTeamForRoster}`]
+    }).then(() => {
+      toast(`✓ Added ${name}`, 'success');
+    });
+  }
+}
+
+function setCoach(team) {
+  const coach = prompt(`Coach name for Team ${team}:`);
+  if (!coach) return;
+  
+  streamCoaches[`t${team}`] = coach;
+  
+  if (currentStreamId) {
+    db.collection('streams').doc(currentStreamId).update({
+      [`coaches.t${team}`]: coach
+    }).then(() => {
+      toast(`✓ Coach set`, 'success');
+    });
+  }
+}
+
+/* ============================================================
    CHAT
 ============================================================ */
 function subscribeComments(streamId, side) {
@@ -2725,24 +3079,61 @@ function copyStreamCode() {
    END / LEAVE
 ============================================================ */
 async function endStream() {
-  if (!confirm('End the live stream?')) return;
+  if (!confirm('🛑 End the live stream?\n\nThis will mark it as completed and save final stats.')) return;
+  
   isRecording = false;
   if (mediaRecorder && mediaRecorder.state === 'recording') {
     mediaRecorder.stop(); // Upload final chunk
   }
-  if (currentStreamId) await db.collection('streams').doc(currentStreamId).update({ status: 'ended', active: false });
+  
+  if (currentStreamId) {
+    try {
+      // Update stream document to mark as ended
+      const updateData = {
+        active: false,
+        status: 'ended',
+        endedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        finalViewerCount: document.getElementById('s-viewer-count')?.textContent || 0,
+        finalScore: {
+          t1: scores.t1,
+          t2: scores.t2
+        },
+        stats: {
+          finalViewers: document.getElementById('s-viewer-count')?.textContent || 0,
+          duration: timerSeconds
+        }
+      };
+      
+      await db.collection('streams').doc(currentStreamId).update(updateData);
+      console.log('✓ Stream marked as ended and saved to past matches');
+      toast('✓ Stream ended and saved to match history', 'success');
+    } catch(err) {
+      console.error('Error ending stream:', err);
+      toast('Error saving stream. Check console.', 'error');
+    }
+  }
+  
   cleanup();
   showScreen('home');
-  toast('Stream ended', 'info');
 }
 
 async function leaveStream() {
   if (currentStreamId && !isHost) {
-    db.collection('streams').doc(currentStreamId).update({
-      viewers: firebase.firestore.FieldValue.increment(-1)
-    }).catch(()=>{});
-    db.collection('streams').doc(currentStreamId)
-      .collection('viewers').doc(userId).delete().catch(()=>{});
+    try {
+      // Decrement viewer count
+      await db.collection('streams').doc(currentStreamId).update({
+        viewers: firebase.firestore.FieldValue.increment(-1)
+      });
+      
+      // Remove viewer from list
+      await db.collection('streams').doc(currentStreamId)
+        .collection('viewers').doc(userId).delete();
+      
+      console.log('✓ Viewer left stream');
+      toast('Left stream', 'info');
+    } catch(err) {
+      console.error('Error leaving stream:', err);
+    }
   }
   cleanup();
   showScreen('home');
