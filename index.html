@@ -529,6 +529,94 @@
       z-index: 5000 !important;
     }
     #live-streams-modal-backdrop.hidden { display: none !important; }
+    
+    /* CREATE/GO LIVE MODAL - FULLSCREEN */
+    #create-modal-backdrop {
+      position: fixed !important;
+      inset: 0 !important;
+      background: var(--bg) !important;
+      backdrop-filter: none !important;
+      display: flex !important;
+      align-items: stretch !important;
+      justify-content: stretch !important;
+      z-index: 5000 !important;
+    }
+    #create-modal-backdrop.hidden { display: none !important; }
+    #create-modal {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      background: var(--bg) !important;
+      border: none !important;
+      display: flex !important;
+      flex-direction: column !important;
+      animation: none !important;
+    }
+    .create-modal-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .create-modal-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+      margin: 0;
+    }
+    .create-modal-close {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--r);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .create-modal-close:hover { background: var(--surface2); color: var(--text); }
+    
+    .create-modal-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .create-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--r2);
+      padding: 1.5rem;
+    }
+    .form-section h3 {
+      font-size: 1.1rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .create-modal-actions {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
     .live-streams-modal {
       width: 100vw !important;
       height: 100vh !important;
@@ -878,6 +966,7 @@
     <div class="right-panel">
       <div class="panel-tabs">
         <button class="panel-tab active" onclick="switchTab('scores',this)">Scores</button>
+        <button class="panel-tab" onclick="switchTab('stats',this)">Stats</button>
         <button class="panel-tab" onclick="switchTab('chat',this)">Chat</button>
         <button class="panel-tab" onclick="switchTab('viewers',this)">Viewers</button>
       </div>
@@ -931,6 +1020,13 @@
           </div>
         </div>
         <button class="btn-danger" style="width:100%;" onclick="resetScores()">Reset Scores</button>
+      </div>
+
+      <!-- STATS PANEL -->
+      <div class="panel-content" id="tab-stats">
+        <div id="stats-edit-panel">
+          <!-- Stats initialized by initializeStatsPanel() -->
+        </div>
       </div>
 
       <div class="panel-content chat-panel" id="tab-chat">
@@ -1024,49 +1120,144 @@
 </div>
 
 <!-- CREATE STREAM MODAL -->
-<div class="modal-backdrop hidden" id="create-modal">
-  <div class="modal">
-    <h2>Go Live</h2>
-    <p>Set up your stream and go live in seconds</p>
-    <div class="form-group">
-      <label>Stream Title</label>
-      <input type="text" id="m-title" placeholder="e.g. Lagos Derby — ENYIMBA vs RANGERS" maxlength="60" />
+<!-- GO LIVE MODAL - FULLSCREEN -->
+<div class="modal-backdrop hidden" id="create-modal-backdrop">
+  <div id="create-modal">
+    <!-- HEADER -->
+    <div class="create-modal-header">
+      <h2>🎬 START YOUR LIVE STREAM</h2>
+      <button class="create-modal-close" onclick="closeCreateModal()">✕ Close</button>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Your Name / Handle</label>
-        <input type="text" id="m-host" placeholder="e.g. SportsCaster_NG" maxlength="30" />
-      </div>
-      <div class="form-group">
-        <label>Sport</label>
-        <select id="m-sport">
-          <option>⚽ Football</option>
-          <option>🏀 Basketball</option>
-          <option>🏈 American Football</option>
-          <option>🎾 Tennis</option>
-          <option>🏐 Volleyball</option>
-          <option>🏑 Hockey</option>
-          <option>🎮 Esports</option>
-          <option>🏆 Other</option>
-        </select>
+
+    <!-- CONTENT -->
+    <div class="create-modal-content">
+      <div class="create-form-grid">
+        
+        <!-- SECTION 1: BASIC INFO -->
+        <div class="form-section">
+          <h3>📋 Basic Information</h3>
+          <div class="form-group">
+            <label>Stream Title</label>
+            <input type="text" id="m-title" placeholder="e.g. Lagos Derby — ENYIMBA vs RANGERS" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label>Your Name / Handle</label>
+            <input type="text" id="m-host" placeholder="e.g. SportsCaster_NG" maxlength="30" />
+          </div>
+          <div class="form-group">
+            <label>Sport / Event Type</label>
+            <select id="m-sport" onchange="updateSportSpecificStats()">
+              <option>⚽ Football</option>
+              <option>🏀 Basketball</option>
+              <option>🏈 American Football</option>
+              <option>🎾 Tennis</option>
+              <option>🏐 Volleyball</option>
+              <option>🏑 Hockey</option>
+              <option>⚾ Baseball</option>
+              <option>🎮 Esports</option>
+              <option>🏆 Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SECTION 2: TEAMS -->
+        <div class="form-section">
+          <h3>👥 Teams / Competitors</h3>
+          <div class="form-group">
+            <label>Team 1 Name</label>
+            <input type="text" id="m-t1" placeholder="Home Team" maxlength="25" value="Team A" />
+          </div>
+          <div class="form-group">
+            <label>Team 2 Name</label>
+            <input type="text" id="m-t2" placeholder="Away Team" maxlength="25" value="Team B" />
+          </div>
+        </div>
+
+        <!-- SECTION 3: MATCH DETAILS -->
+        <div class="form-section">
+          <h3>⏱️ Match Details</h3>
+          <div class="form-group">
+            <label>Expected Match Length</label>
+            <select id="m-match-length" onchange="toggleCustomLength()">
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes (Half)</option>
+              <option value="90" selected>90 minutes (Full)</option>
+              <option value="120">120 minutes (Extra Time)</option>
+              <option value="180">180 minutes (Best of 3 Sets)</option>
+              <option value="240">240 minutes (Best of 5 Sets)</option>
+              <option value="300">300 minutes (Custom Long Match)</option>
+              <option value="custom">Custom Duration</option>
+            </select>
+          </div>
+          <div class="form-group" id="custom-length-group" style="display:none;">
+            <label>Custom Duration (minutes)</label>
+            <input type="number" id="m-match-length-custom" placeholder="Enter minutes" min="1" max="1440" />
+          </div>
+        </div>
+
+        <!-- SECTION 4: MATCH ANALYSIS -->
+        <div class="form-section">
+          <h3>📊 Match Analysis & Features</h3>
+          <div class="form-group">
+            <label style="font-size:0.85rem; margin-bottom: 0.75rem;">Enable voting for Man of the Match</label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="m-enable-voting" checked /> Allow viewers to vote for best player
+            </label>
+          </div>
+          <div class="form-group">
+            <label>Match Venue</label>
+            <input type="text" id="m-venue" placeholder="e.g. National Stadium, Lagos" maxlength="50" />
+          </div>
+          <div class="form-group">
+            <label>Match Commentary Notes</label>
+            <textarea id="m-notes" placeholder="Any pre-match notes, context, or announcements for viewers..." maxlength="200" style="resize: vertical; height: 80px;"></textarea>
+          </div>
+        </div>
+
+        <!-- SECTION 5: STATISTICS SELECTION -->
+        <div class="form-section" style="grid-column: span 2;">
+          <h3>📈 Track Statistics (Score is always included)</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-period" checked /> Period/Quarter
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-timer" checked /> Timer/Clock
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-fouls" /> Fouls/Penalties
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-possession" /> Possession %
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-cards" /> Cards (Yellow/Red)
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-shots" /> Shots on Goal
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-outs" /> Baseball Stats (Outs/Balls)
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text); font-weight: normal;">
+              <input type="checkbox" id="m-stat-custom" /> Custom Stats
+            </label>
+          </div>
+          <div id="sport-specific-stats" style="margin-top: 1rem; padding: 1rem; background: var(--surface2); border-radius: 8px; display: none;">
+            <!-- Populated by updateSportSpecificStats() -->
+          </div>
+        </div>
+
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Team 1 Name</label>
-        <input type="text" id="m-t1" placeholder="Home Team" maxlength="25" value="Team A" />
-      </div>
-      <div class="form-group">
-        <label>Team 2 Name</label>
-        <input type="text" id="m-t2" placeholder="Away Team" maxlength="25" value="Team B" />
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeCreateModal()">Cancel</button>
-      <button class="btn-primary" onclick="startStream()">📡 Go Live</button>
+
+    <!-- FOOTER / ACTIONS -->
+    <div class="create-modal-actions">
+      <button class="btn-ghost" onclick="closeCreateModal()">✕ Cancel</button>
+      <button class="btn-primary" style="padding: 0.8rem 2rem; font-size: 0.95rem;" onclick="startStream()">🚀 GO LIVE</button>
     </div>
   </div>
-  </div>
+</div>
 
   <!-- LIVE STREAMS MODAL - FULLSCREEN -->
   <div class="modal-backdrop hidden" id="live-streams-modal-backdrop">
@@ -1271,11 +1462,45 @@ function showScreen(name) {
    CREATE STREAM
 ============================================================ */
 function openCreateModal() {
-  document.getElementById('create-modal').classList.remove('hidden');
+  document.getElementById('create-modal-backdrop').classList.remove('hidden');
   document.getElementById('m-host').value = userName || '';
   document.getElementById('m-title').focus();
+  updateSportSpecificStats();
 }
-function closeCreateModal() { document.getElementById('create-modal').classList.add('hidden'); }
+
+function closeCreateModal() {
+  document.getElementById('create-modal-backdrop').classList.add('hidden');
+}
+
+function toggleCustomLength() {
+  const val = document.getElementById('m-match-length').value;
+  const customGroup = document.getElementById('custom-length-group');
+  customGroup.style.display = val === 'custom' ? 'block' : 'none';
+}
+
+function updateSportSpecificStats() {
+  const sport = document.getElementById('m-sport').value;
+  const container = document.getElementById('sport-specific-stats');
+  
+  let recommendations = '<strong style="display: block; margin-bottom: 0.75rem;">⭐ Recommended for ' + (sport.split(' ')[1] || 'this sport') + ':</strong>';
+  
+  if (sport.includes('Football')) {
+    recommendations += '☑️ Fouls/Penalties, Possession %, Cards, Shots on Goal';
+  } else if (sport.includes('Basketball')) {
+    recommendations += '☑️ Fouls, 3-Point %, Free Throws (Custom)';
+  } else if (sport.includes('Baseball')) {
+    recommendations += '☑️ Baseball Stats (Outs/Balls/Strikes)';
+  } else if (sport.includes('Tennis')) {
+    recommendations += '☑️ Aces, Double Faults (Custom), Break Points';
+  } else if (sport.includes('Hockey')) {
+    recommendations += '☑️ Fouls, Shots, Possession %';
+  } else {
+    recommendations += '☑️ Check stats that fit your sport';
+  }
+  
+  container.innerHTML = recommendations;
+  container.style.display = 'block';
+}
 
 /* ============================================================
    LIVE STREAMS MODAL
@@ -1542,15 +1767,48 @@ window.debugStreams = function() {
   console.log('Modal Loaded:', isModalStreamLoaded);
   console.log('Background Listener Active:', !!backgroundStreamListener);
   console.log('Modal Unsubscriber Active:', !!liveStreamsUnsubscriber);
+  console.log('User ID:', userId);
+  console.log('User Email:', userEmail);
   
-  if (db) {
-    db.collection('streams').where('active', '==', true).get().then(snap => {
-      console.log('Active streams in Firestore:', snap.size);
-      snap.forEach(doc => {
-        console.log(`- ${doc.id}:`, doc.data());
+  if (!db) {
+    console.error('Database not initialized!');
+    return;
+  }
+  
+  // Check ACTIVE streams
+  console.log('\n--- CHECKING ACTIVE STREAMS (active: true) ---');
+  db.collection('streams').where('active', '==', true).get().then(snap => {
+    console.log('✓ Active streams found:', snap.size);
+    snap.forEach(doc => {
+      console.log(`  • ${doc.id}:`, doc.data());
+    });
+  }).catch(err => console.error('Error querying active:', err));
+  
+  // Check ALL streams
+  console.log('\n--- CHECKING ALL STREAMS (no filter) ---');
+  db.collection('streams').limit(20).get().then(snap => {
+    console.log('✓ Total streams found:', snap.size);
+    snap.forEach(doc => {
+      const d = doc.data();
+      console.log(`  • ${doc.id}:`, {
+        title: d.title,
+        active: d.active,
+        status: d.status,
+        host: d.host,
+        viewers: d.viewers,
+        createdAt: d.createdAt
       });
     });
-  }
+  }).catch(err => console.error('Error querying all:', err));
+  
+  // Check current user's streams
+  console.log('\n--- CHECKING USER STREAMS (hostId: userId) ---');
+  db.collection('streams').where('hostId', '==', userId).limit(10).get().then(snap => {
+    console.log('✓ User streams found:', snap.size);
+    snap.forEach(doc => {
+      console.log(`  • ${doc.id}:`, doc.data());
+    });
+  }).catch(err => console.error('Error querying user streams:', err));
 };
 
 window.testModalOpen = function() {
@@ -1558,11 +1816,84 @@ window.testModalOpen = function() {
   openLiveStreamsModal();
 };
 
+window.checkFirebase = function() {
+  console.log('Firebase Status:');
+  console.log('  DB initialized:', !!db);
+  console.log('  Auth initialized:', !!auth);
+  console.log('  Current user:', auth?.currentUser?.email);
+  
+  if (db && auth?.currentUser) {
+    db.collection('streams').count().get().then(snap => {
+      console.log('  Total documents in streams:', snap.data().count);
+    }).catch(e => console.error('  Count error:', e.message));
+  }
+};
+
+window.fixActiveFields = async function() {
+  if (!confirm('This will update ALL streams to have active: true. Continue?')) return;
+  
+  console.log('Updating all streams...');
+  try {
+    const snap = await db.collection('streams').get();
+    let count = 0;
+    
+    for (const doc of snap.docs) {
+      const data = doc.data();
+      if (data.active !== true) {
+        console.log(`  Updating ${doc.id}...`);
+        await doc.ref.update({ active: true });
+        count++;
+      }
+    }
+    
+    console.log(`✓ Updated ${count} streams with active: true`);
+    alert(`Fixed ${count} streams! Refresh modal to see changes.`);
+  } catch(err) {
+    console.error('Error:', err);
+    alert('Error: ' + err.message);
+  }
+};
+
+window.createTestStream = async function() {
+  if (!userId) {
+    console.error('Not logged in!');
+    alert('Please login first');
+    return;
+  }
+  
+  const testId = 'TEST_' + Date.now();
+  const testData = {
+    title: 'TEST STREAM - ' + new Date().toLocaleTimeString(),
+    host: userName || userEmail || 'Test User',
+    hostId: userId,
+    sport: '⚽ Football',
+    active: true,
+    status: 'live',
+    viewers: 5,
+    period: '1st Half',
+    timer: '12:34',
+    t1: { name: 'Team A', score: 2 },
+    t2: { name: 'Team B', score: 1 },
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    chunkCount: 0
+  };
+  
+  console.log('🧪 Creating test stream:', testId, testData);
+  
+  try {
+    await db.collection('streams').doc(testId).set(testData);
+    console.log('✓ Test stream created:', testId);
+    alert('✓ Test stream created! Open "Watch Live" to see it.');
+  } catch(err) {
+    console.error('Error creating test stream:', err);
+    alert('Error: ' + err.message);
+  }
+};
+
 function joinStreamFromModal(streamId) {
   closeLiveStreamsModal();
-  currentStreamId = streamId;
-  switchScreen('viewer');
-  subscribeToStream(streamId);
+  console.log('👤 User joining stream:', streamId);
+  connectToStream(streamId);
 }
 
 function modalJoinByCode() {
@@ -1579,6 +1910,13 @@ async function startStream() {
   const sport  = v('m-sport');
   const t1Name = v('m-t1').trim() || 'Team A';
   const t2Name = v('m-t2').trim() || 'Team B';
+  const venue  = v('m-venue').trim();
+  const notes  = v('m-notes').trim();
+  const matchLength = document.getElementById('m-match-length').value === 'custom' 
+    ? parseInt(document.getElementById('m-match-length-custom').value) || 90 
+    : parseInt(document.getElementById('m-match-length').value) || 90;
+  const enableVoting = document.getElementById('m-enable-voting').checked;
+  
   if (!title) { toast('Please enter a stream title', 'error'); return; }
 
   try {
@@ -1596,6 +1934,29 @@ async function startStream() {
   currentStreamId = genId();
   chunkIndex = 0;
 
+  // Collect selected statistics
+  const selectedStats = {
+    score: true, // Always included
+    period: document.getElementById('m-stat-period').checked,
+    timer: document.getElementById('m-stat-timer').checked,
+    fouls: document.getElementById('m-stat-fouls').checked,
+    possession: document.getElementById('m-stat-possession').checked,
+    cards: document.getElementById('m-stat-cards').checked,
+    shots: document.getElementById('m-stat-shots').checked,
+    outs: document.getElementById('m-stat-outs').checked,
+    custom: document.getElementById('m-stat-custom').checked
+  };
+  
+  // Initialize stat values
+  const stats = {
+    t1Fouls: 0, t2Fouls: 0,
+    t1Possession: 50, t2Possession: 50,
+    t1Cards: { yellow: 0, red: 0 }, t2Cards: { yellow: 0, red: 0 },
+    t1Shots: 0, t2Shots: 0,
+    outs: 0, balls: 0, strikes: 0,
+    customValues: {}
+  };
+
   // Setup UI
   document.getElementById('s-stream-title').textContent = title;
   document.getElementById('s-stream-meta').textContent = sport + ' • Hosted by ' + host;
@@ -1609,20 +1970,42 @@ async function startStream() {
   document.getElementById('s-local-video').srcObject = localStream;
 
   // Create Firestore stream document
-  await db.collection('streams').doc(currentStreamId).set({
-    title, hostId: userId, hostName: host, sport,
-    status: 'live', viewerCount: 0,
+  const streamData = {
+    title, hostId: userId, host: host, sport,
+    active: true, status: 'live', viewers: 0,
     t1: { name: t1Name, score: 0 },
     t2: { name: t2Name, score: 0 },
     timer: '00:00', period: '1st Half',
+    // Match Details
+    matchLength: matchLength,
+    venue: venue,
+    notes: notes,
+    // Analysis & Voting
+    enableVoting: enableVoting,
+    manOfMatchVotes: {}, // { playerId: voteCount }
+    // Statistics
+    selectedStats: selectedStats,
+    stats: stats,
     chunkCount: 0,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  };
+  
+  console.log('🎬 Creating stream:', { streamId: currentStreamId, matchLength, enableVoting, ...streamData });
+  
+  await db.collection('streams').doc(currentStreamId).set(streamData);
+  
+  console.log('✓ Stream created successfully:', currentStreamId);
+  
+  // Initialize stats panel
+  initializeStatsPanel(selectedStats);
+  
+  // Show match details
+  toast(`🎬 Live! Match: ${matchLength} min | Venue: ${venue || 'TBA'} | Voting: ${enableVoting ? '✓' : '✗'}`, 'success');
 
   // Subscribe to viewer count
   const unsub = db.collection('streams').doc(currentStreamId).onSnapshot(snap => {
     const d = snap.data();
-    if (d) document.getElementById('s-viewer-count').textContent = d.viewerCount || 0;
+    if (d) document.getElementById('s-viewer-count').textContent = d.viewers || 0;
   });
   streamUnsubscribers.push(unsub);
 
@@ -1787,42 +2170,65 @@ function joinStreamByCode() {
 }
 
 async function connectToStream(streamId) {
+  console.log('Connecting to stream:', streamId);
   currentStreamId = streamId;
   isHost = false;
   lastPlayedChunk = -1;
   viewerChunkQueue = [];
   viewerPlaying = false;
 
-  const snap = await db.collection('streams').doc(streamId).get();
-  if (!snap.exists || snap.data().status === 'ended') {
-    toast('Stream not found or has ended', 'error');
+  try {
+    const snap = await db.collection('streams').doc(streamId).get();
+    if (!snap.exists) {
+      console.error('Stream not found:', streamId);
+      toast('Stream not found', 'error');
+      return;
+    }
+    
+    const data = snap.data();
+    if (data.status === 'ended' || !data.active) {
+      console.error('Stream is not active:', { status: data.status, active: data.active });
+      toast('Stream has ended', 'error');
+      return;
+    }
+    
+    console.log('✓ Stream found and active:', data.title);
+    
+    document.getElementById('v-stream-title').textContent = data.title;
+    document.getElementById('v-stream-meta').textContent = (data.sport || '') + ' • by ' + (data.host || 'Host');
+    showScreen('viewer');
+    updateViewerScoreBar(data);
+
+    // Track this viewer joining
+    console.log('📝 Adding viewer to stream...');
+    await db.collection('streams').doc(streamId)
+      .collection('viewers').doc(userId).set({
+        name: userName || userEmail || 'Viewer',
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    
+    // Increment viewer count
+    await db.collection('streams').doc(streamId).update({
+      viewers: firebase.firestore.FieldValue.increment(1)
+    });
+    
+    console.log('✓ Viewer added successfully');
+    toast('Connected to stream', 'success');
+    
+  } catch(err) {
+    console.error('Error connecting to stream:', err);
+    toast('Error joining stream: ' + err.message, 'error');
     return;
   }
-  const data = snap.data();
-
-  document.getElementById('v-stream-title').textContent = data.title;
-  document.getElementById('v-stream-meta').textContent = (data.sport || '') + ' • by ' + (data.hostName || 'Host');
-  showScreen('viewer');
-  updateViewerScoreBar(data);
-
-  // Track this viewer joining
-  await db.collection('streams').doc(streamId)
-    .collection('viewers').doc(userId).set({
-      name: userName || userEmail || 'Viewer',
-      joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  db.collection('streams').doc(streamId).update({
-    viewerCount: firebase.firestore.FieldValue.increment(1)
-  }).catch(()=>{});
 
   // Listen for stream metadata updates
   const unsub1 = db.collection('streams').doc(streamId).onSnapshot(snap => {
     if (!snap.exists) { leaveStream(); return; }
     const d = snap.data();
-    if (d.status === 'ended') { toast('Stream has ended', 'info'); leaveStream(); return; }
+    if (d.status === 'ended' || !d.active) { toast('Stream has ended', 'info'); leaveStream(); return; }
     updateViewerScoreBar(d);
-    document.getElementById('v-viewer-count').textContent = d.viewerCount || 0;
-    document.getElementById('v-online-count').textContent = (d.viewerCount || 0) + ' online';
+    document.getElementById('v-viewer-count').textContent = d.viewers || 0;
+    document.getElementById('v-online-count').textContent = (d.viewers || 0) + ' online';
   });
   streamUnsubscribers.push(unsub1);
 
@@ -2082,6 +2488,157 @@ function resetTimer() {
 }
 
 /* ============================================================
+   STATS PANEL
+============================================================ */
+let streamStats = {};
+
+function initializeStatsPanel(selectedStats) {
+  streamStats = selectedStats;
+  const panel = document.getElementById('stats-edit-panel');
+  if (!panel) return;
+  
+  let html = '<div style="padding: 1rem; overflow-y: auto;">';
+  html += '<h3 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--accent);">📊 Live Stats</h3>';
+  
+  if (selectedStats.fouls) {
+    html += `
+      <div class="stat-group">
+        <label style="font-size: 0.8rem;">Fouls</label>
+        <div class="stat-inputs">
+          <div><input type="number" id="stat-t1-fouls" value="0" min="0" style="width: 60px;" /> Team 1</div>
+          <div><input type="number" id="stat-t2-fouls" value="0" min="0" style="width: 60px;" /> Team 2</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (selectedStats.possession) {
+    html += `
+      <div class="stat-group">
+        <label style="font-size: 0.8rem;">Possession %</label>
+        <div class="stat-inputs">
+          <div><input type="number" id="stat-t1-poss" value="50" min="0" max="100" style="width: 60px;" /> T1</div>
+          <div><input type="number" id="stat-t2-poss" value="50" min="0" max="100" style="width: 60px;" /> T2</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (selectedStats.cards) {
+    html += `
+      <div class="stat-group">
+        <label style="font-size: 0.8rem;">Cards</label>
+        <div class="stat-inputs" style="font-size: 0.75rem;">
+          <div>🟨 <input type="number" id="stat-t1-yellow" value="0" min="0" style="width: 40px;" /> 🟥 <input type="number" id="stat-t1-red" value="0" min="0" style="width: 40px;" /> T1</div>
+          <div>🟨 <input type="number" id="stat-t2-yellow" value="0" min="0" style="width: 40px;" /> 🟥 <input type="number" id="stat-t2-red" value="0" min="0" style="width: 40px;" /> T2</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (selectedStats.shots) {
+    html += `
+      <div class="stat-group">
+        <label style="font-size: 0.8rem;">Shots on Goal</label>
+        <div class="stat-inputs">
+          <div><input type="number" id="stat-t1-shots" value="0" min="0" style="width: 60px;" /> Team 1</div>
+          <div><input type="number" id="stat-t2-shots" value="0" min="0" style="width: 60px;" /> Team 2</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (selectedStats.outs) {
+    html += `
+      <div class="stat-group">
+        <label style="font-size: 0.8rem;">Baseball Stats</label>
+        <div class="stat-inputs">
+          <div><input type="number" id="stat-outs" value="0" min="0" max="3" style="width: 50px;" /> Outs</div>
+          <div><input type="number" id="stat-balls" value="0" min="0" max="4" style="width: 50px;" /> Balls</div>
+          <div><input type="number" id="stat-strikes" value="0" min="0" max="3" style="width: 50px;" /> Strikes</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  if (selectedStats.custom) {
+    html += `
+      <div class="stat-group">
+        <label style="font-size: 0.8rem;">Custom Stats</label>
+        <input type="text" id="custom-stat-name" placeholder="Stat name" style="width: 100%; margin-bottom: 0.25rem;" />
+        <button class="btn-primary" onclick="addCustomStat()" style="width: 100%; padding: 0.4rem; font-size: 0.75rem;">+ Add Custom</button>
+        <div id="custom-stats-list" style="margin-top: 0.5rem;"></div>
+      </div>
+    `;
+  }
+  
+  html += '<button class="btn-primary" onclick="syncAllStats()" style="width: 100%; margin-top: 1rem;">💾 Save Stats</button>';
+  html += '</div>';
+  
+  panel.innerHTML = html;
+}
+
+function updateStat(statName, value) {
+  if (currentStreamId) {
+    db.collection('streams').doc(currentStreamId).update({
+      [`stats.${statName}`]: value
+    }).catch(e => console.error('Stat update error:', e));
+  }
+}
+
+function syncAllStats() {
+  const updates = {};
+  
+  if (document.getElementById('stat-t1-fouls')) {
+    updates['stats.t1Fouls'] = parseInt(document.getElementById('stat-t1-fouls').value) || 0;
+    updates['stats.t2Fouls'] = parseInt(document.getElementById('stat-t2-fouls').value) || 0;
+  }
+  
+  if (document.getElementById('stat-t1-poss')) {
+    updates['stats.t1Possession'] = parseInt(document.getElementById('stat-t1-poss').value) || 50;
+    updates['stats.t2Possession'] = parseInt(document.getElementById('stat-t2-poss').value) || 50;
+  }
+  
+  if (document.getElementById('stat-t1-shots')) {
+    updates['stats.t1Shots'] = parseInt(document.getElementById('stat-t1-shots').value) || 0;
+    updates['stats.t2Shots'] = parseInt(document.getElementById('stat-t2-shots').value) || 0;
+  }
+  
+  if (document.getElementById('stat-outs')) {
+    updates['stats.outs'] = parseInt(document.getElementById('stat-outs').value) || 0;
+    updates['stats.balls'] = parseInt(document.getElementById('stat-balls').value) || 0;
+    updates['stats.strikes'] = parseInt(document.getElementById('stat-strikes').value) || 0;
+  }
+  
+  if (Object.keys(updates).length > 0 && currentStreamId) {
+    db.collection('streams').doc(currentStreamId).update(updates)
+      .then(() => toast('Stats saved! 📊', 'success'))
+      .catch(e => toast('Error saving stats: ' + e.message, 'error'));
+  }
+}
+
+function addCustomStat() {
+  const name = document.getElementById('custom-stat-name').value.trim();
+  if (!name) { toast('Enter a stat name', 'error'); return; }
+  
+  const list = document.getElementById('custom-stats-list');
+  const id = 'custom_' + Date.now();
+  const html = `
+    <div style="display: flex; gap: 0.25rem; margin-bottom: 0.35rem;">
+      <input type="text" value="${name}" style="flex: 1; font-size: 0.75rem;" />
+      <input type="number" value="0" style="width: 50px; font-size: 0.75rem;" />
+      <button onclick="document.getElementById('${id}').remove()" style="padding: 0.2rem 0.4rem; font-size: 0.65rem;">✕</button>
+    </div>
+  `;
+  const el = document.createElement('div');
+  el.id = id;
+  el.innerHTML = html;
+  list.appendChild(el);
+  
+  document.getElementById('custom-stat-name').value = '';
+}
+
+/* ============================================================
    CHAT
 ============================================================ */
 function subscribeComments(streamId, side) {
@@ -2173,7 +2730,7 @@ async function endStream() {
   if (mediaRecorder && mediaRecorder.state === 'recording') {
     mediaRecorder.stop(); // Upload final chunk
   }
-  if (currentStreamId) await db.collection('streams').doc(currentStreamId).update({ status: 'ended' });
+  if (currentStreamId) await db.collection('streams').doc(currentStreamId).update({ status: 'ended', active: false });
   cleanup();
   showScreen('home');
   toast('Stream ended', 'info');
@@ -2182,7 +2739,7 @@ async function endStream() {
 async function leaveStream() {
   if (currentStreamId && !isHost) {
     db.collection('streams').doc(currentStreamId).update({
-      viewerCount: firebase.firestore.FieldValue.increment(-1)
+      viewers: firebase.firestore.FieldValue.increment(-1)
     }).catch(()=>{});
     db.collection('streams').doc(currentStreamId)
       .collection('viewers').doc(userId).delete().catch(()=>{});
