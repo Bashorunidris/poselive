@@ -1407,26 +1407,108 @@
          padding: 0.2rem 0.5rem;
          font-size: 0.65rem;
        }
-       .streamer-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-       .right-panel { 
-         height: clamp(250px, 40vh, 350px); 
-         border-left: none; 
-         border-top: 1px solid var(--border);
-         max-height: 45vh;
+       
+       /* MOBILE VIDEO PRIORITY - 70% of viewport */
+       .streamer-body { 
+         grid-template-columns: 1fr; 
+         grid-template-rows: 1fr auto;
+         min-height: 100vh;
        }
-       .viewer-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+       
+       .video-area {
+         flex: 1 1 70vh;
+         min-height: 280px;
+         max-height: 75vh;
+         overflow: hidden;
+       }
+       
+       .video-preview-wrap {
+         width: 100%;
+         height: 100%;
+         background: #000;
+         aspect-ratio: 16/9;
+       }
+       
+       video {
+         width: 100%;
+         height: 100%;
+         object-fit: contain;
+         background: #000;
+       }
+       
+       .controls-bar {
+         padding: 0.5rem;
+         gap: 0.5rem;
+       }
+       
+       .right-panel { 
+         height: 200px;
+         border-left: none; 
+         border-top: 2px solid var(--border);
+         max-height: 25vh;
+         overflow-y: auto;
+       }
+       
+       /* Hide analysis & stats tabs on mobile */
+       .panel-tab:nth-child(2),
+       .panel-tab:nth-child(3),
+       .panel-tab:nth-child(4) {
+         display: none;
+       }
+       
+       .panel-tab {
+         padding: 0.5rem 0.75rem;
+         font-size: 0.75rem;
+       }
+       
+       .panel-content {
+         max-height: 180px;
+         overflow-y: auto;
+       }
+       
+       /* VIEWER MOBILE VIDEO PRIORITY */
+       .viewer-body { 
+         grid-template-columns: 1fr; 
+         grid-template-rows: 1fr auto;
+         min-height: 100vh;
+       }
+       
+       .viewer-video-side {
+         flex: 1 1 70vh;
+         min-height: 280px;
+         max-height: 75vh;
+         overflow: hidden;
+       }
+       
+       .viewer-video-wrap {
+         width: 100%;
+         height: 100%;
+         background: #000;
+         aspect-ratio: 16/9;
+       }
+       
+       .viewer-score-bar {
+         padding: 0.5rem;
+         gap: 0.5rem;
+         font-size: 0.75rem;
+       }
+       
+       .vsb-score {
+         font-size: clamp(1rem, 4vw, 1.4rem);
+       }
+       
        .viewer-chat-side { 
          border-left: none; 
-         border-top: 1px solid var(--border);
-         height: clamp(200px, 30vh, 300px);
+         border-top: 2px solid var(--border);
+         height: 180px;
+         max-height: 20vh;
        }
-       .viewer-score-bar {
-         padding: var(--spacing-xs) var(--spacing-md);
-         gap: 0.75rem;
+       
+       .chat-messages {
+         max-height: 140px;
+         font-size: 0.8rem;
        }
-       .vsb-score {
-         font-size: clamp(1.2rem, 5vw, 1.8rem);
-       }
+       
        .home-cards { grid-template-columns: 1fr; }
        .streams-grid {
          grid-template-columns: 1fr;
@@ -2348,9 +2430,20 @@
           </div>
 
           <!-- FOOTER / ACTIONS -->
-          <div style="padding: 1.5rem 2rem; border-top: 2px solid var(--border); background: var(--surface); display: flex; gap: 1rem; justify-content: flex-end; flex-shrink: 0;">
+          <div id="go-live-actions" style="padding: 1.5rem 2rem; border-top: 2px solid var(--border); background: var(--surface); display: flex; gap: 1rem; justify-content: flex-end; flex-shrink: 0;">
           <button class="btn-ghost" onclick="closeCreateModal()" style="padding: 0.75rem 2rem; font-size: 0.95rem;">Cancel</button>
-          <button class="btn-primary" style="padding: 0.75rem 2.5rem; font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, var(--accent) 0%, #0099cc 100%);" onclick="startStream()">🚀 GO LIVE NOW</button>
+          
+          <!-- BASIC TAB BUTTON -->
+          <button id="btn-next-basic" class="btn-primary" style="padding: 0.75rem 2.5rem; font-size: 0.95rem; font-weight: 700; display: none;" onclick="goToNextTab('teams')">Next →</button>
+          
+          <!-- TEAMS TAB BUTTON -->
+          <button id="btn-next-teams" class="btn-primary" style="padding: 0.75rem 2.5rem; font-size: 0.95rem; font-weight: 700; display: none;" onclick="goToNextTab('analysis')">Next →</button>
+          
+          <!-- ANALYSIS TAB BUTTON -->
+          <button id="btn-next-analysis" class="btn-primary" style="padding: 0.75rem 2.5rem; font-size: 0.95rem; font-weight: 700; display: none;" onclick="goToNextTab('settings')">Next →</button>
+          
+          <!-- SETTINGS TAB BUTTON (GO LIVE) -->
+          <button id="btn-golive-settings" class="btn-primary" style="padding: 0.75rem 2.5rem; font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, var(--accent) 0%, #0099cc 100%); display: none;" onclick="startStream()">🚀 GO LIVE NOW</button>
           </div>
           </div>
 </div>
@@ -2698,20 +2791,64 @@ function closeCreateModal() {
 }
 
 function switchGoLiveTab(tab, btn) {
-   // Hide all tabs
-   document.querySelectorAll('.go-live-tab-content').forEach(el => el.classList.remove('active'));
-   document.querySelectorAll('.go-live-tab').forEach(b => {
-     b.style.color = 'var(--text2)';
-     b.style.borderBottomColor = 'transparent';
-   });
-   
-   // Show selected tab
-   const tabEl = document.getElementById(`go-live-tab-${tab}`);
-   if (tabEl) tabEl.classList.add('active');
-   
-   // Style active tab button
-   btn.style.color = 'var(--text)';
-   btn.style.borderBottomColor = 'var(--accent)';
+    // Hide all tabs
+    document.querySelectorAll('.go-live-tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.go-live-tab').forEach(b => {
+      b.style.color = 'var(--text2)';
+      b.style.borderBottomColor = 'transparent';
+    });
+    
+    // Show selected tab
+    const tabEl = document.getElementById(`go-live-tab-${tab}`);
+    if (tabEl) tabEl.classList.add('active');
+    
+    // Style active tab button
+    btn.style.color = 'var(--text)';
+    btn.style.borderBottomColor = 'var(--accent)';
+    
+    // UPDATE FOOTER BUTTONS BASED ON TAB
+    updateGoLiveFooterButtons(tab);
+}
+
+function updateGoLiveFooterButtons(tab) {
+    // Hide all buttons
+    document.getElementById('btn-next-basic').style.display = 'none';
+    document.getElementById('btn-next-teams').style.display = 'none';
+    document.getElementById('btn-next-analysis').style.display = 'none';
+    document.getElementById('btn-golive-settings').style.display = 'none';
+    
+    // Show appropriate button for current tab
+    switch(tab) {
+      case 'basic':
+        document.getElementById('btn-next-basic').style.display = 'inline-block';
+        break;
+      case 'teams':
+        document.getElementById('btn-next-teams').style.display = 'inline-block';
+        break;
+      case 'analysis':
+        document.getElementById('btn-next-analysis').style.display = 'inline-block';
+        break;
+      case 'settings':
+        document.getElementById('btn-golive-settings').style.display = 'inline-block';
+        break;
+    }
+}
+
+function goToNextTab(tabName) {
+    // Find and click the tab button
+    const tabButtons = document.querySelectorAll('.go-live-tab');
+    const tabMap = {
+      'basic': 0,
+      'teams': 1,
+      'analysis': 2,
+      'settings': 3
+    };
+    
+    const tabIndex = tabMap[tabName];
+    if (tabIndex !== undefined && tabButtons[tabIndex]) {
+      const btn = tabButtons[tabIndex];
+      switchGoLiveTab(tabName, btn);
+    }
 }
 
 function toggleCustomLength() {
@@ -4870,43 +5007,153 @@ function copyStreamCode() {
    END / LEAVE / CANCEL
 ============================================================ */
 async function endStream() {
-   if (!confirm('🛑 End the live stream?\n\nThis will mark it as completed and save final stats.')) return;
-   
-   isRecording = false;
-   if (mediaRecorder && mediaRecorder.state === 'recording') {
-     mediaRecorder.stop(); // Upload final chunk
-   }
-   
-   if (currentStreamId) {
-     try {
-       // Update stream document to mark as ended
-       const updateData = {
-         active: false,
-         status: 'ended',
-         endedAt: firebase.firestore.FieldValue.serverTimestamp(),
-         finalViewerCount: document.getElementById('s-viewer-count')?.textContent || 0,
-         finalScore: {
-           t1: scores.t1,
-           t2: scores.t2
-         },
-         stats: {
-           finalViewers: document.getElementById('s-viewer-count')?.textContent || 0,
-           duration: timerSeconds
-         }
-       };
-       
-       await db.collection('streams').doc(currentStreamId).update(updateData);
-       console.log('✓ Stream marked as ended and saved to past matches');
-       toast('✓ Stream ended and saved to match history', 'success');
-     } catch(err) {
-       console.error('Error ending stream:', err);
-       toast('Error saving stream. Check console.', 'error');
-     }
-   }
-   
-   cleanup();
-   resetGoLiveModal();
-   showScreen('home');
+    if (!confirm('🛑 End the live stream?\n\nViewers will see the last moment before it closes.')) return;
+    
+    // STEP 1: Stop recording new chunks (allow last chunk to finish)
+    isRecording = false;
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+    
+    if (currentStreamId) {
+      try {
+        // STEP 2: Mark stream as "ending" (viewers keep watching with buffer)
+        console.log('⏱️ Stream ending... allowing viewers to finish watching last chunk');
+        await db.collection('streams').doc(currentStreamId).update({
+          status: 'ending',
+          endingAt: firebase.firestore.FieldValue.serverTimestamp(),
+          active: false // Stop new uploads
+        });
+        
+        // STEP 3: Wait 3 seconds for last chunk to be received by viewers
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        // STEP 4: THEN mark as fully ended and save final stats
+        const updateData = {
+          status: 'ended',
+          endedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          finalViewerCount: document.getElementById('s-viewer-count')?.textContent || 0,
+          finalScore: {
+            t1: scores.t1,
+            t2: scores.t2
+          },
+          stats: {
+            finalViewers: document.getElementById('s-viewer-count')?.textContent || 0,
+            duration: timerSeconds
+          }
+        };
+        
+        await db.collection('streams').doc(currentStreamId).update(updateData);
+        console.log('✓ Stream marked as fully ended and saved to past matches');
+        toast('✓ Stream ended and saved to match history', 'success');
+        
+      } catch(err) {
+        console.error('Error ending stream:', err);
+        toast('Error saving stream. Check console.', 'error');
+      }
+    }
+    
+    cleanup();
+    resetGoLiveModal();
+    showScreen('home');
+}
+
+// Viewer side - handle stream ending gracefully
+function monitorStreamStatus() {
+  if (!currentStreamId) return;
+  
+  db.collection('streams').doc(currentStreamId).onSnapshot(doc => {
+    const data = doc.data();
+    if (!data) return;
+    
+    if (data.status === 'ending') {
+      // Show subtle notification
+      showStreamEndingNotice();
+      
+      // Wait for buffer to finish, then show popup
+      setTimeout(() => {
+        if (data.status === 'ended') {
+          handleStreamEnded();
+        }
+      }, 3500);
+    }
+    
+    if (data.status === 'ended' && !doc.data().handledByViewer) {
+      handleStreamEnded();
+    }
+  });
+}
+
+function showStreamEndingNotice() {
+  // Subtle banner at top
+  const notice = document.getElementById('stream-ending-notice');
+  if (notice) return; // Already shown
+  
+  const banner = document.createElement('div');
+  banner.id = 'stream-ending-notice';
+  banner.style.cssText = `
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 152, 0, 0.95);
+    color: white;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    z-index: 4999;
+    animation: slideDown 0.3s ease;
+  `;
+  banner.textContent = '⏱️ Stream ending... finishing last moment';
+  document.body.appendChild(banner);
+}
+
+function handleStreamEnded() {
+  // Remove ending notice
+  document.getElementById('stream-ending-notice')?.remove();
+  
+  // Show ended popup
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop';
+  modal.style.background = 'rgba(0,0,0,0.85)';
+  modal.id = 'stream-ended-modal';
+  
+  modal.innerHTML = `
+    <div class="modal" style="text-align: center; max-width: 400px;">
+      <h2 style="color: var(--accent); margin-bottom: 1rem; font-family: 'Bebas Neue'; font-size: 2rem;">🎬 STREAM ENDED</h2>
+      <p style="color: var(--text2); margin-bottom: 1.5rem; font-size: 0.95rem;">
+        Thanks for watching the match! The stream has been saved and is now available as a replay.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <button class="btn-primary" onclick="goToHomeFromViewer()" style="width: 100%; padding: 0.75rem;">
+          ← Back to Home
+        </button>
+        <button class="btn-ghost" onclick="viewReplay()" style="width: 100%; padding: 0.75rem;">
+          📺 Watch Replay
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function goToHomeFromViewer() {
+  document.getElementById('stream-ended-modal')?.remove();
+  cleanup();
+  resetViewerState();
+  showScreen('home');
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 async function cancelStream() {
@@ -5506,6 +5753,8 @@ function renderScheduledMatches(docs) {
       hour: '2-digit', minute: '2-digit'
     });
     
+    const countdownId = `countdown-${doc.id}`;
+    
     html += `
       <div style="margin-bottom: 1rem; padding: 1.25rem; background: linear-gradient(135deg, var(--surface2) 0%, rgba(0, 212, 255, 0.05) 100%); border-radius: 8px; border: 2px solid var(--border2);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
@@ -5515,6 +5764,15 @@ function renderScheduledMatches(docs) {
           </div>
           <div style="background: var(--accent); color: #000; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; margin-left: 1rem;">📅 ${timeStr}</div>
         </div>
+        
+        <!-- COUNTDOWN TIMER -->
+        <div id="${countdownId}" style="background: rgba(0, 212, 255, 0.1); border: 1px solid var(--accent); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem; text-align: center;">
+          <div style="font-size: 0.7rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Starts in</div>
+          <div style="font-size: 1.3rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace;">
+            <span data-countdown="${eventTime.getTime()}">Calculating...</span>
+          </div>
+        </div>
+        
         <div style="font-size: 0.85rem; color: var(--text); margin-bottom: 0.75rem; font-weight: 600;">
           ${escHtml(d.t1?.name || 'Team A')} <span style="color: var(--text2);">vs</span> ${escHtml(d.t2?.name || 'Team B')}
         </div>
@@ -5524,6 +5782,50 @@ function renderScheduledMatches(docs) {
     `;
   });
   list.innerHTML = html;
+  
+  // Start countdown timers
+  startCountdownTimers();
+}
+
+// Countdown timer function
+function startCountdownTimers() {
+  function updateCountdowns() {
+    const now = Date.now();
+    document.querySelectorAll('[data-countdown]').forEach(el => {
+      const targetTime = parseInt(el.getAttribute('data-countdown'));
+      const diff = targetTime - now;
+      
+      if (diff <= 0) {
+        el.textContent = '🔴 LIVE NOW!';
+        el.style.color = '#ff3346';
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        let countdownText = '';
+        if (days > 0) {
+          countdownText = `${days}d ${hours}h ${minutes}m`;
+        } else if (hours > 0) {
+          countdownText = `${hours}h ${minutes}m ${seconds}s`;
+        } else if (minutes > 0) {
+          countdownText = `${minutes}m ${seconds}s`;
+        } else {
+          countdownText = `${seconds}s`;
+        }
+        
+        el.textContent = countdownText;
+        el.style.color = diff < 300000 ? '#ffc107' : 'var(--accent)'; // Yellow if < 5 min
+      }
+    });
+  }
+  
+  // Update immediately
+  updateCountdowns();
+  
+  // Update every second
+  setInterval(updateCountdowns, 1000);
 }
 
 function renderCancelledMatches(docs) {
@@ -5695,4 +5997,3 @@ window.addEventListener('load', initBannerAds);
 
 </body>
 </html>
-  
