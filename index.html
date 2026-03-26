@@ -5139,21 +5139,10 @@ function handleStreamEnded() {
 }
 
 function goToHomeFromViewer() {
-  document.getElementById('stream-ended-modal')?.remove();
-  cleanup();
-  resetViewerState();
-  showScreen('home');
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+   document.getElementById('stream-ended-modal')?.remove();
+   cleanup();
+   resetViewerState();
+   showScreen('home');
 }
 
 async function cancelStream() {
